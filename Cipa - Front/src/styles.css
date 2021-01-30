@@ -1,0 +1,235 @@
+/* You can add global styles to this file, and also import other style files */
+/* @import "~bootstrap/dist/css/bootstrap.min.css"; */
+@import "./vendors/css/bootstrap.min.css";
+@import "./vendors/css/styles.css";
+@import "./vendors/css/animate.css";
+@import "./vendors/css/plugins/toastr/toastr.min.css";
+@import "./vendors/css/plugins/datapicker/datepicker3.css";
+@import "~ladda/dist/ladda-themeless.min.css";
+@import "~font-awesome/css/font-awesome.css";
+@import "~daterangepicker/daterangepicker.css";
+@import "~angular-calendar/css/angular-calendar.css";
+
+@media (max-width: 488px) {
+  .col-xxs-12 {
+    width: 100% !important;
+  }
+}
+
+.ibox .label {
+  font-size: 11px;
+  font-weight: 400;
+}
+
+body.md-skin {
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+select.form-control.input-sm {
+  padding: 3px 6px;
+}
+
+input[readonly].input-white {
+  background-color: white;
+}
+
+.vertical-timeline-block.inactive {
+  color: #b6b6b6;
+}
+
+.vertical-timeline-block.inactive .templates {
+  display: none;
+}
+
+.vertical-container {
+  max-width: initial;
+  width: 100%;
+}
+
+.vertical-timeline-content app-datepicker .form-group {
+  margin-bottom: 0;
+}
+
+.vertical-timeline-content app-datepicker input {
+  background-color: initial !important;
+  border: 0;
+  height: initial;
+  padding: 0 0 0 5px;
+}
+
+.vertical-timeline-content app-datepicker .input-group-addon {
+  border: 0;
+  padding: 0;
+}
+
+.light-timeline .dropzone {
+  background: #eee;
+}
+
+app-custom-input[required] label::after,
+label.required::after {
+  content: " *";
+  color: red;
+}
+
+#eleitores-form app-datepicker input[readonly] {
+  background: white;
+}
+
+.row.flex-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row.flex-row > [class*="col-"] {
+  display: flex;
+  flex-direction: column;
+}
+
+app-card-inscricao {
+  flex-grow: 1;
+  margin-bottom: 25px;
+}
+
+.table-responsive th,
+.table-responsive td {
+  white-space: nowrap;
+}
+
+textarea {
+  resize: vertical;
+}
+
+ul.inline {
+  padding-left: 0;
+}
+
+ul.inline li {
+  display: inline;
+  padding-right: 10px;
+}
+
+ul.inline li a:not(.btn) {
+  text-decoration: underline;
+}
+
+.custom-slider .ng5-slider .ng5-slider-bar {
+  background: #1bb394;
+  height: 2px;
+}
+.custom-slider .ng5-slider .ng5-slider-selection {
+  background: orange;
+}
+
+.custom-slider .ng5-slider .ng5-slider-pointer {
+  width: 8px;
+  height: 16px;
+  top: auto; /* to remove the default positioning */
+  bottom: 0;
+  background-color: #333;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.custom-slider .ng5-slider .ng5-slider-pointer:after {
+  display: none;
+}
+
+.custom-slider .ng5-slider .ng5-slider-bubble {
+  bottom: 14px;
+}
+
+.custom-slider .ng5-slider .ng5-slider-limit {
+  font-weight: bold;
+  color: orange;
+}
+
+.custom-slider .ng5-slider .ng5-slider-tick {
+  width: 1px;
+  height: 10px;
+  margin-left: 4px;
+  border-radius: 0;
+  background: #1bb394;
+  top: -1px;
+}
+
+.custom-slider .ng5-slider .ng5-slider-tick.ng5-slider-selected {
+  background: orange;
+}
+
+.toast-success:before {
+  content: "" !important;
+}
+
+.toast-error:before {
+  content: "" !important;
+}
+
+.toast-info:before {
+  content: "" !important;
+}
+
+.toast-warning:before {
+  content: "" !important;
+}
+
+.navbar-form-custom a.list-group-item {
+  background: #f9f9f9;
+}
+
+.navbar-form-custom a.list-group-item.active {
+  background: #1ab394;
+}
+
+popover-content .popover {
+  width: 150px;
+}
+
+.wrapper-content {
+  padding-bottom: 60px !important;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.tooltip-show {
+  z-index: 9999 !important;
+}
+.tooltip-image {
+  display: table !important;
+}
+
+.navbar-toggler {
+  background-color: #1ab394;
+  color: #fff;
+  padding: 6px 12px;
+  font-size: 14px;
+  margin: 8px;
+  line-height: 1;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.md-skin .navbar-static-top.white-bg {
+  background-color: white !important;
+}
+
+label.btn {
+  margin-bottom: 0;
+}
+
+label input.hide {
+  display: none;
+}
+
+
+

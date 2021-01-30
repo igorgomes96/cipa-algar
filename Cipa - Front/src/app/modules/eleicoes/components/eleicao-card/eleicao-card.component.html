@@ -1,0 +1,113 @@
+<div class="ibox">
+  <div class="ibox-content product-box">
+    <div class="product-desc">
+
+      <h4>{{ eleicao.estabelecimento?.empresa?.razaoSocial }}
+        <span *ngIf="eleicao.etapaAtual" class="label label-success float-right">
+          {{ eleicao.etapaAtual.nome }}
+        </span>
+        <span *ngIf="!eleicao.etapaAtual && eleicao.dataFinalizacao" class="label label-primary float-right">
+          Finalizada em {{ eleicao.dataFinalizacao | date:'dd/MMM' }}
+        </span>
+      </h4>
+      <p>
+        <span class="fa fa-calendar"></span> <strong> {{ eleicao.gestao }}</strong> <br>
+        <span class="fa fa-map-marker"></span> {{ eleicao.estabelecimento?.endereco }}<br>
+        <span [hidden]="!eleicao.estabelecimento?.descricao">
+          <span class="fa fa-info"></span> {{ eleicao.estabelecimento?.descricao }}<br>
+        </span>
+        <span class="fa fa-home"></span> {{ eleicao.estabelecimento?.cidade }}
+      </p>
+
+      <div *ngIf="perfilComAcesso">
+        Grupo: <strong class="label label-warning">{{ eleicao.grupo }}</strong>
+        <a (click)="alterarGrupo()" class="m-l-sm" *ngIf="!eleicao.dataFinalizacao"><span
+            class="fa fa-pencil"></span></a>
+      </div>
+
+      <div *ngIf="!perfilComAcesso">
+        <span *ngIf="!eleicao.inscricoesFinalizadas">
+          <span class="fa fa-calendar"></span> Inscrições: de
+          <strong>{{ eleicao.inicioInscricao | date:'dd/MMM' }}</strong> a
+          <strong>{{ eleicao.terminoInscricao | date:'dd/MMM' }}</strong>
+        </span>
+
+        <span *ngIf="!eleicao.votacaoFinalizada">
+          <br>
+          <span class="fa fa-calendar"></span> Votação: de <strong>{{ eleicao.inicioVotacao | date:'dd/MMM' }}</strong>
+          a <strong>{{ eleicao.terminoVotacao | date:'dd/MMM' }}</strong>
+        </span>
+      </div>
+
+      <div *ngIf="eleicao.usuarioEleitor">
+
+        <div *ngIf="eleicao.voto; else naoVotou">
+          <br>
+          Seu voto foi registrado em <strong>{{ eleicao.voto.horario | date:'dd/MMM HH:mm' }}</strong>.
+        </div>
+
+        <ng-template #naoVotou>
+          <div *ngIf="eleicao.candidato">
+            <br>
+            Status da Inscrição: <span class="label"
+              [ngClass]="labelStatusClass">{{ eleicao.candidato.statusAprovacao }}</span>
+          </div>
+        </ng-template>
+
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <span *ngIf="perfilComAcesso">
+        <a [routerLink]="'/eleicoes/' + eleicao.id + '/cronograma'" class="btn btn-success btn-outline m-r-sm"><span
+            class="fa fa-calendar"></span> Acessar</a>
+
+        <a [routerLink]="'/eleicoes/' + eleicao.id + '/configuracao'" *ngIf="!eleicao.dataFinalizacao" class="btn btn-primary btn-outline m-r-sm"><span
+            class="fa fa-cogs"></span> Configurar</a>
+
+        <button *ngIf="!eleicao.etapaAtual && !eleicao.dataFinalizacao" class="btn btn-outline-danger"
+          (click)="excluirEleicao()"><span class="fa fa-trash"></span>
+          Excluir</button>
+
+      </span>
+      <span *ngIf="eleicao.usuarioEleitor">
+
+        <span *ngIf="eleicao.inscricoesFinalizadas; else inscricaoNaoFinalizada">
+          <span *ngIf="!eleicao.voto && eleicao.etapaAtual?.etapaObrigatoriaId === CodigoEtapaObrigatoria.Votacao">
+            <a [routerLink]="'/eleicoes/' + eleicao.id + '/votacao'" class="btn btn-outline btn-success m-r-sm">
+              <span class="fa fa-thumbs-up"></span> Votar
+            </a>
+          </span>
+        </span>
+
+        <ng-template #inscricaoNaoFinalizada>
+          <span *ngIf="eleicao.candidato; else naoInscrito">
+            <a [routerLink]="'/eleicoes/' + eleicao.id + '/inscricoes/nova'" class="btn btn-outline btn-success m-r-sm">
+              <span class="fa fa-user"></span> Minha Inscrição
+            </a>
+          </span>
+
+          <ng-template #naoInscrito>
+            <span *ngIf="eleicao.etapaAtual?.etapaObrigatoriaId === CodigoEtapaObrigatoria.Inscricao">
+              <a [routerLink]="'/eleicoes/' + eleicao.id + '/inscricoes/nova'"
+                class="btn btn-outline btn-primary m-r-sm">
+                <span class="fa fa-user"></span> Inscreva-se!
+              </a>
+            </span>
+          </ng-template>
+
+        </ng-template>
+
+      </span>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #modalAlteracaoGrupo>
+  <app-alteracao-grupo [codigoGrupo]="eleicao.grupo" [salvandoGrupo]="salvandoGrupo"
+    (selecionarGrupo)="salvarGrupo($event)"></app-alteracao-grupo>
+</ng-template>
+
+<router-outlet></router-outlet>

@@ -1,0 +1,25 @@
+.feed-element {
+  display: flex;
+}
+
+.foto {
+  padding-right: 5px;
+}
+
+.foto img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.media-body {
+  padding: 12px 20px 20px;
+}
+
+p.text-muted {
+  margin-top: 3px;
+}
+
+.nome {
+  font-weight: 600;
+}

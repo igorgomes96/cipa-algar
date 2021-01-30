@@ -1,0 +1,6 @@
+<div class="container">
+  <app-panel title="Estabelecimentos Cadastrados">
+    <a class="btn btn-primary m-b-md" routerLink="novo"><span class="fa fa-plus"></span> Novo Estabelecimento</a>
+    <app-estabelecimentos-lista [estabelecimentos]="estabelecimentos" (estabelecimentoExcluido)="estabelecimentoExcluido($event)"></app-estabelecimentos-lista>
+  </app-panel>
+</div>

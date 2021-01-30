@@ -1,0 +1,106 @@
+<app-panel title="Eleitores" [labelText]="eleitores?.totalRecords + ' eleitores'" [collapsible]="false">
+  <div *ngIf="!eleicao.inscricoesFinalizadas">
+    <p>Importação em massa de eleitores.
+      <app-ajuda-tooltip ajuda="Para facilitar o cadastro, você pode fazer a importação de um arquivo Excel com os dados dos funcionários.
+    Baixe o template, preencha os dados e faça a importação.">
+      </app-ajuda-tooltip>
+    </p>
+    <button class="btn btn-success m-r-sm m-t-xs" (click)="downloadTemplate()"><em class="fa fa-download"></em> Baixar
+      Template</button>
+    <label for="upload" class="btn btn-primary m-t-xs">
+      <input type="file" name="upload" id="upload" class="hide" (change)="onUploadArquivo($event)">
+      <em class="fa fa-upload"></em> Importar Dados
+    </label>
+  </div>
+
+  <div class="alert m-t-md m-b-md" [ngClass]="alertStatusImportacao" *ngIf="ultimaImportacao">
+    Status da última Importação: <strong>{{ ultimaImportacao?.status }}</strong><br>
+    Upload do arquivo de importação realizado em <strong>{{ ultimaImportacao.arquivo.dataUpload | date:'dd/MM/yyyy HH:mm' }}</strong>.<br>
+    Arquivo: <strong>{{ ultimaImportacao.arquivo.nome }}</strong><br>
+
+    <div *ngIf="ultimaImportacao?.status === StatusImportacao.Processando" class="m-t-sm">
+      <small>{{ progresso?.progresso === 100 ? 'Salvando registros no banco de dados...' : 'Lendo o arquivo e validando os dados...' }}</small>
+      <div class="progress progress-mini">
+        <div [style.width]="progresso?.progresso + '%'" class="progress-bar progress-bar-striped progress-bar-animated active"></div>
+      </div>
+      <small>Progresso da Importação: <strong>{{ progresso?.progresso | number:'1.1-1' }}%</strong></small>
+    </div>
+
+    <div class="progress progress-mini m-t-sm" *ngIf="ultimaImportacao?.status === StatusImportacao.Aguardando">
+      <div class="progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" style="width: 100%">
+      </div>
+    </div>
+
+    <div *ngIf="ultimaImportacao?.status === StatusImportacao.FinalizadoComFalha" class="m-t-sm">
+      <a class="link-erros" [routerLink]="['importacoes', ultimaImportacao.id, 'inconsistencias']">Visualizar Erros</a>
+    </div>
+  </div>
+
+
+  <hr *ngIf="!ultimaImportacao">
+
+  <h4>
+    Lista de Eleitores
+    <app-ajuda-tooltip ajuda="A tabela abaixo exibe todos os eleitores cadastrados nessa eleição. Para procurar um eleitor específico, basta
+        começar a digitar o nome dele na campo abaixo. À medida que você digita a tabela vai sendo filtrada.">
+    </app-ajuda-tooltip>
+  </h4>
+  <p></p>
+  <form [formGroup]="form">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <em class="fa fa-search"></em>
+      </span>
+      <input type="text" id="filtro" formControlName="filtro" placeholder="Pesquise pelo nome"
+        class="input form-control">
+    </div>
+  </form>
+  <br>
+  <div class="row m-t-md m-b-lg">
+    <div class="col-sm-12">
+      <a routerLink="novo" class="btn btn-primary m-r-sm" *ngIf="!eleicao.votacaoFinalizada">
+        <em class="fa fa-plus"></em> Cadastrar Novo
+      </a>
+      <button class="btn btn-danger" (click)="excluirTodos()" *ngIf="!eleicao.etapaAtual && !eleicao.dataFinalizacao">
+        <em class="fa fa-trash"></em> Excluir todos
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <app-pagination [paginationInfo]="eleitores" (alteraPagina)="alteraPagina($event)"
+        (alteraTamanhoPagina)="alteraTamanhoPagina($event)"></app-pagination>
+    </div>
+  </div>
+
+
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Admissão</th>
+          <th class="text-right"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let eleitor of eleitores.result">
+          <td>{{ eleitor.nome }}</td>
+          <td>{{ eleitor.email }}</td>
+          <td>{{ eleitor.dataAdmissao | date:'dd/MM/yyyy' }}</td>
+          <td class="text-right">
+            <div>
+              <a class="btn btn-xs btn-outline btn-success m-r-xs" [routerLink]="['./', eleitor.id]"><em
+                  class="fa fa-pencil"></em></a>
+              <button class="btn btn-xs btn-outline btn-danger" (click)="excluir(eleitor.id)"><em
+                  class="fa fa-trash"></em></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</app-panel>

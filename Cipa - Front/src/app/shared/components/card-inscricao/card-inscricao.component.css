@@ -1,0 +1,45 @@
+.ibox {
+  height: 100%;
+  margin-bottom: 0;
+}
+
+.ibox-content,
+.product-desc {
+  display: flex;
+	flex: 1 0 auto;
+  flex-direction: column;
+  padding-bottom: 12px;
+}
+
+.ibox-content {
+  padding-bottom: 20px;
+}
+
+.product-box {
+    height: 100%;
+}
+
+.foto img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.foto {
+    padding: 0;
+}
+
+
+@media (max-width: 576px) {
+    .foto img {
+        width: 100%;
+        height: initial;
+        object-fit: initial;
+    }
+}
+
+.actions {
+  margin-right: 20px;
+}
+
+

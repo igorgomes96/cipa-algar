@@ -1,0 +1,33 @@
+<!-- <button class="btn btn-primary" (click)="registrarResultadoApuracao()">Registrar Resultado</button> -->
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Nome</th>
+        <th>Cargo</th>
+        <th class="text-center">Admissão</th>
+        <th class="text-center">Data Inscrição</th>
+        <th class="text-center">Votos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let candidato of candidatos">
+        <td>
+          <span class="label" [ngClass]="resultadoClass(candidato)"
+            *ngIf="candidato.nome !== '(Em Branco)'">{{ candidato.resultadoApuracao }}
+          </span>
+          <span class="label"
+            *ngIf="candidato.nome === '(Em Branco)'">Branco
+          </span>
+        </td>
+        <td>{{ candidato.nome }}</td>
+        <td>{{ candidato.cargo }}</td>
+        <td class="text-center">{{ candidato.dataAdmissao | date:'dd/MM/yyyy' }}</td>
+        <td class="text-center">{{ candidato.horarioInscricao | date:'dd/MM/yy HH:mm' }}</td>
+        <td class="text-center">{{ candidato.votos }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

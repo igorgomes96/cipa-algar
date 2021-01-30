@@ -1,0 +1,17 @@
+<div class="feed-activity-list">
+  <div class="feed-element" *ngFor="let ap of apuracao;let i=index">
+    <div class="pull-left" class="foto" *ngIf="ap.foto">
+      <img alt="image" class="img-circle" [src]="ap.foto">
+    </div>
+    <div class="media-body">
+      <span class="badge badge-success pull-right">
+        <small>{{ ap.votos }} Votos</small>
+      </span>
+      <span class="nome">{{ colocacao(i) }}º - {{ ap.nome }}</span><br>
+      <p class="text-muted">
+        {{ ap.cargo || 'N/D' }}<br>
+        Admitido em {{ ap.dataAdmissao | date:'dd/MM/yyyy' }}
+      </p>
+    </div>
+  </div>
+</div>

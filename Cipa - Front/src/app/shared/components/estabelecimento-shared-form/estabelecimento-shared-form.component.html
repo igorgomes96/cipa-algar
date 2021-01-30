@@ -1,0 +1,65 @@
+<form #form="ngForm" (submit)="salvar()">
+  <div class="row">
+    <div class="col-lg-2 col-md-3 col-sm-6">
+      <app-custom-input [(ngModel)]="estabelecimento.id" #id="ngModel" [control]="id" id="id" label="Código" name="id"
+        readOnly="true">
+      </app-custom-input>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-9 col-md-8 col-sm-12">
+      <div class="form-group">
+        <label class="control-label required">Empresa</label>
+        <select name="empresa" id="empresa" class="form-control" required [(ngModel)]="estabelecimento.empresaId">
+          <option [value]="undefined">(Selecione)</option>
+          <option *ngFor="let emp of empresas" [value]="emp.id">{{ emp.razaoSocial }}</option>
+        </select>
+      </div>
+    </div>
+
+
+
+    <div class="col-lg-3 col-md-4 col-sm-12">
+      <app-custom-input [(ngModel)]="estabelecimento.cidade" #cidade="ngModel" [control]="cidade" id="cidade"
+        label="Cidade" name="cidade" required maxlength="100">
+      </app-custom-input>
+    </div>
+
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-12">
+      <app-custom-input [(ngModel)]="estabelecimento.endereco" #endereco="ngModel" [control]="endereco" id="endereco"
+        label="Endereço" name="endereco" required maxlength="255">
+      </app-custom-input>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-2 col-md-3 col-sm-12">
+      <div class="form-group">
+        <label class="control-label required">Grupo</label>
+        <app-ajuda-tooltip ajuda="O grupo ao qual pertence a empresa define o dimensionamento dos membros da CIPA. Consulta a NR-5."></app-ajuda-tooltip>
+        <select required name="grupo" id="grupo" class="form-control" [(ngModel)]="estabelecimento.grupoId">
+          <option value="">(Selecione)</option>
+          <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.codigoGrupo }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label class="control-label">Informações Gerais</label>
+        <textarea name="descricao" id="descricao" rows="5" [(ngModel)]="estabelecimento.descricao" #descricao="ngModel"
+          class="form-control" maxlength="255"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary m-r-sm" [disabled]="form.invalid"><i class="fa fa-save"></i> Salvar</button>
+  <button type="button" class="btn btn-default" (click)="cancelar()">Cancelar</button>
+</form>
