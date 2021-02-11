@@ -22,6 +22,7 @@ namespace Cipa.Domain.Helpers
     {
         public const string Matricula = "Matrícula";
         public const string Email = "Email";
+        public const string Login = "Login";
         public const string Nome = "Nome";
         public const string Cargo = "Cargo";
         public const string Area = "Área";

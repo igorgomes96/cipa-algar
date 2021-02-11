@@ -189,9 +189,10 @@ namespace Cipa.Application
             var eleicao = _unitOfWork.EleicaoRepository.BuscarPeloId(eleicaoId);
             if (eleicao == null) throw new NotFoundException("Eleição não encontrada.");
 
-            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuario(eleitor.Email);
+            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloLogin(eleitor.Login);
             if (usuario == null)
-                usuario = new Usuario(eleitor.Email, eleitor.Nome, eleitor.Cargo);
+                usuario = new Usuario(eleitor.Login, eleitor.Email, eleitor.Nome, eleitor.Cargo);
+
             eleitor.Usuario = usuario;
 
             var eleitorAdicionado = eleicao.AdicionarEleitor(eleitor);
@@ -335,9 +336,10 @@ namespace Cipa.Application
             var eleicao = _unitOfWork.EleicaoRepository.BuscarPeloId(eleicaoId);
             if (eleicao == null) throw new NotFoundException("Eleição não encontrada.");
 
-            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuario(eleitor.Email);
+            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloEmail(eleitor.Email);
             if (usuario == null)
-                usuario = new Usuario(eleitor.Email, eleitor.Nome, eleitor.Cargo);
+                usuario = new Usuario(eleitor.Login, eleitor.Email, eleitor.Nome, eleitor.Cargo);
+
             eleitor.Usuario = usuario;
 
             var eleitorAtualizado = eleicao.AtualizarEleitor(eleitor);

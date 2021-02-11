@@ -46,7 +46,7 @@ namespace Cipa.Application
             usuario.Email = usuario.Email.Trim().ToLower();
             var conta = _unitOfWork.ContaRepository.BuscarPeloId(usuario.ContaId.Value);
             if (conta == null) throw new NotFoundException("Conta não encontrada.");
-            var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarUsuario(usuario.Email);
+            var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(usuario.Email);
             if (usuarioExistente != null)
             {
                 if (usuarioExistente.Perfil == PerfilUsuario.SESMT || usuarioExistente.Perfil == PerfilUsuario.Administrador)
@@ -69,7 +69,7 @@ namespace Cipa.Application
             var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarPeloId(usuario.Id);
             if (usuarioExistente == null) throw new NotFoundException("Usuário não encontrado.");
             usuario.Email = usuario.Email.Trim().ToLower();
-            if (usuario.Email != usuarioExistente.Email && (_repositoryBase as IUsuarioRepository).BuscarUsuario(usuario.Email) != null)
+            if (usuario.Email != usuarioExistente.Email && (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(usuario.Email) != null)
                 throw new DuplicatedException($"Já há um usuário cadastrado com o e-mail '{usuario.Email}'.");
             usuarioExistente.Cargo = usuario.Cargo;
             usuarioExistente.Email = usuario.Email.Trim().ToLower();
@@ -90,7 +90,7 @@ namespace Cipa.Application
                     usuario.ContaId = null;
             }
 
-            var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarUsuario(usuario.Email);
+            var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(usuario.Email);
             if (usuarioExistente != null)
             {
                 if (usuarioExistente.Perfil == PerfilUsuario.Administrador)
@@ -136,7 +136,7 @@ namespace Cipa.Application
 
         public void ResetarSenha(string emailUsuario)
         {
-            var usuario = (_repositoryBase as IUsuarioRepository).BuscarUsuario(emailUsuario);
+            var usuario = (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(emailUsuario);
             if (usuario == null) throw new NotFoundException("Usuário não encontrado.");
 
             usuario.ResetarSenha();

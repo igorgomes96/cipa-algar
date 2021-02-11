@@ -45,7 +45,7 @@ namespace Cipa.Domain.Test.Services
             conta.AdicionarEtapaPadrao(new EtapaPadraoConta("Convocação", "Convocação", 1, conta.Id, 1, ECodigoEtapaObrigatoria.Convocacao));
             conta.AdicionarEtapaPadrao(new EtapaPadraoConta("Inscrição", "Inscrição", 2, conta.Id, 2, ECodigoEtapaObrigatoria.Inscricao));
             conta.AdicionarEtapaPadrao(new EtapaPadraoConta("Votação", "Votação", 3, conta.Id, 2, ECodigoEtapaObrigatoria.Votacao));
-            usuarioCriacao = new Usuario("gestor@email.com", "Gestor", "Técnico do SESMT")
+            usuarioCriacao = new Usuario("gestor", "gestor@email.com", "Gestor", "Técnico do SESMT")
             {
                 Conta = conta
             };
@@ -60,14 +60,14 @@ namespace Cipa.Domain.Test.Services
         [Fact]
         public void FormatarEmailPadrao_TodosOsParametrosValidos_RetornaListaEmails()
         {
-            var usuario1 = new Usuario("email1@email.com", "Usuário 1", "Cargo 1") { Id = 1 };
-            var usuario2 = new Usuario("email2@email.com", "Usuário 2", "Cargo 2") { Id = 2, Senha = "A#SESR3" };
-            var usuario3 = new Usuario("email3@email.com", "Usuário 3", "Cargo 3") { Id = 3 };
-            var usuario4 = new Usuario("email4@email.com", "Usuário 4", "Cargo 4") { Id = 4, Senha = "A#SEsd98f" };
-            var eleitor1 = new Eleitor("Eleitor 1", "email1@email.com") { Id = 1, Usuario = usuario1, Cargo = "Cargo 1" };
-            var eleitor2 = new Eleitor("Eleitor 2", "email2@email.com") { Id = 2, Usuario = usuario2, Cargo = "Cargo 2" };
-            var eleitor3 = new Eleitor("Eleitor 3", "email3@email.com") { Id = 3, Usuario = usuario3, Cargo = "Cargo 3" };
-            var eleitor4 = new Eleitor("Eleitor 4", "email4@email.com") { Id = 4, Usuario = usuario4, Cargo = "Cargo 4" };
+            var usuario1 = new Usuario("email1", "email1@email.com", "Eleitor 1", "Cargo 1") { Id = 1 };
+            var usuario2 = new Usuario("email2", "email2@email.com", "Eleitor 2", "Cargo 2") { Id = 2, Senha = "A#SESR3" };
+            var usuario3 = new Usuario("email3", "email3@email.com", "Eleitor 3", "Cargo 3") { Id = 3 };
+            var usuario4 = new Usuario("email4", "email4@email.com", "Eleitor 4", "Cargo 4") { Id = 4, Senha = "A#SEsd98f" };
+            var eleitor1 = new Eleitor(usuario1) { Id = 1, };
+            var eleitor2 = new Eleitor(usuario2) { Id = 2, };
+            var eleitor3 = new Eleitor(usuario3) { Id = 3, };
+            var eleitor4 = new Eleitor(usuario4) { Id = 4, };
 
             eleicao.AdicionarEleitor(eleitor1);
             eleicao.AdicionarEleitor(eleitor2);

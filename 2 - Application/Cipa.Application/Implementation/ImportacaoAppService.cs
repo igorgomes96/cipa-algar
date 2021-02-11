@@ -94,21 +94,25 @@ namespace Cipa.Application
             foreach (DataRow dr in dataTable.Rows)
             {
                 var nome = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Nome, validators[ColunasArquivo.Nome]).Trim();
+                var login = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Login, validators[ColunasArquivo.Login]).Trim();
                 var email = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Email, validators[ColunasArquivo.Email]).Trim().ToLower();
-                var eleitor = new Eleitor(nome, email)
+                var cargo = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Cargo, validators[ColunasArquivo.Cargo])?.Trim();
+                
+                var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloEmail(email);
+                if (usuario == null)
+                    usuario = new Usuario(login, email, nome, cargo);
+
+                var eleitor = new Eleitor(usuario)
                 {
+                    Cargo = cargo,
                     Area = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Area, validators[ColunasArquivo.Area])?.Trim(),
-                    Cargo = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Cargo, validators[ColunasArquivo.Cargo])?.Trim(),
                     DataAdmissao = ObtemValorFormatoCorreto<DateTime?>(dr, ColunasArquivo.DataAdmissao, validators[ColunasArquivo.DataAdmissao]),
                     DataNascimento = ObtemValorFormatoCorreto<DateTime?>(dr, ColunasArquivo.DataNascimento, validators[ColunasArquivo.DataNascimento]),
                     Matricula = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Matricula, validators[ColunasArquivo.Matricula])?.Trim(),
                     NomeGestor = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.NomeGestor, validators[ColunasArquivo.NomeGestor])?.Trim(),
                     EmailGestor = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.EmailGestor, validators[ColunasArquivo.EmailGestor])?.Trim()
                 };
-                var usuario = _unitOfWork.UsuarioRepository.BuscarUsuario(eleitor.Email);
-                if (usuario == null)
-                    usuario = new Usuario(eleitor.Email, eleitor.Nome, eleitor.Cargo);
-                eleitor.Usuario = usuario;
+
                 eleitores.Add(eleitor);
                 linha++;
                 NotificarProgresso(linha - LINHA_INICIAL_ARQUIVO, dataTable.Rows.Count, emailUsuario);

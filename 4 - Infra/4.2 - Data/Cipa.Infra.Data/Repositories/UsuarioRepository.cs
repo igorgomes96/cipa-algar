@@ -17,9 +17,14 @@ namespace Cipa.Infra.Data.Repositories
             return DbSet.FirstOrDefault(u => u.Email == email && u.Senha == senha);
         }
 
-        public Usuario BuscarUsuario(string email)
+        public Usuario BuscarUsuarioPeloEmail(string email)
         {
             return DbSet.FirstOrDefault(u => u.Email == email);
+        }
+
+        public Usuario BuscarUsuarioPeloLogin(string login)
+        {
+            return DbSet.FirstOrDefault(u => u.Login == login);
         }
 
         public Usuario BuscarUsuarioPeloCodigoRecuperacao(Guid codigo)

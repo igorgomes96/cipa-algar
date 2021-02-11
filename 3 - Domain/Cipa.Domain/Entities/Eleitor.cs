@@ -4,21 +4,20 @@ namespace Cipa.Domain.Entities
 {
     public class Eleitor : Entity<int>
     {
-        public Eleitor(string nome, string email)
-        {
-            Nome = nome;
-            Email = email;
-        }
-
+        protected Eleitor() { }
         public Eleitor(Usuario usuario)
         {
             Usuario = usuario;
             UsuarioId = usuario.Id;
             Nome = usuario.Nome;
             Email = usuario.Email;
+            Login = usuario.Login;
+            Cargo = usuario.Cargo;
         }
 
         public string Nome { get; set; }
+        public EMetodoAutenticacao MetodoAutenticacao { get; set; }
+        public string Login { get; set; }
         public string Email { get; set; }
         public string Matricula { get; set; }
         public string Area { get; set; }
@@ -40,6 +39,8 @@ namespace Cipa.Domain.Entities
             Nome = eleitor.Nome;
             Email = eleitor.Email;
             Matricula = eleitor.Matricula;
+            MetodoAutenticacao = eleitor.MetodoAutenticacao;
+            Login = eleitor.Login;
             Area = eleitor.Area;
             Cargo = eleitor.Cargo;
             DataNascimento = eleitor.DataNascimento;

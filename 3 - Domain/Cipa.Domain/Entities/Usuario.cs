@@ -8,8 +8,10 @@ namespace Cipa.Domain.Entities
 {
     public class Usuario : Entity<int>
     {
-        public Usuario(string email, string nome, string cargo)
+
+        public Usuario(string login, string email, string nome, string cargo)
         {
+            Login = login;
             Email = email.Trim().ToLower();
             Nome = nome;
             Cargo = cargo;
@@ -17,6 +19,8 @@ namespace Cipa.Domain.Entities
             ExpiracaoCodigoRecuperacao = DateTime.Now.AddDays(1);
             Perfil = Cipa.Domain.Helpers.PerfilUsuario.Eleitor;
         }
+
+        public string Login { get; set; }
         public string Email { get; set; }
         public string Nome { get; set; }
         public string Senha { get; set; }

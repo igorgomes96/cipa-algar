@@ -374,8 +374,11 @@ namespace Cipa.Domain.Entities
             if (JaUltrapassouEtapa(ECodigoEtapaObrigatoria.Votacao))
                 throw new CustomException("Não é permitido cadastrar eleitores após o período de votação.");
 
-            if (Eleitores.Any(e => e.Email == eleitor.Email))
+            if (!string.IsNullOrWhiteSpace(eleitor.Email) && Eleitores.Any(e => e.Email == eleitor.Email))
                 throw new CustomException("Já existe um eleitor cadastrado com o mesmo e-mail para essa eleição.");
+
+            if (Eleitores.Any(e => e.Login == eleitor.Login))
+                throw new CustomException("Já existe um eleitor cadastrado com o mesmo login para essa eleição.");
 
             LinhaDimensionamento novoDimensionamento = Grupo.CalcularDimensionamento(Dimensionamento.QtdaEleitores + 1);
             if (JaUltrapassouEtapa(ECodigoEtapaObrigatoria.Inscricao) && Dimensionamento.QtdaInscricoesAprovadas < novoDimensionamento.TotalCipeiros)
@@ -515,7 +518,8 @@ namespace Cipa.Domain.Entities
             IEnumerable<Inscricao> apuracao = OrdenarInscricoesPorQtdaVotos();
 
             var qtdaVotosEmBranco = Votos.Count - Inscricoes.Sum(i => i.Votos);
-            var votosEmBranco = new Inscricao(this, new Eleitor("(Em Branco)", "(Em Branco)"), "(Em Branco)")
+            var usuarioEmBranco = new Usuario("(Em Branco)", "(Em Branco)", "(Em Branco)", "(Em Branco)");
+            var votosEmBranco = new Inscricao(this, new Eleitor(usuarioEmBranco), "(Em Branco)")
             {
                 Votos = qtdaVotosEmBranco
             };
@@ -551,6 +555,9 @@ namespace Cipa.Domain.Entities
 
             if (eleitorExistente.Email != eleitor.Email && Eleitores.Any(e => e.Email == eleitor.Email))
                 throw new CustomException("Já existe um eleitor cadastrado com o mesmo e-mail para essa eleição.");
+
+            if (eleitorExistente.Login != eleitor.Login && Eleitores.Any(e => e.Login == eleitor.Login))
+                throw new CustomException("Já existe um eleitor cadastrado com o mesmo login para essa eleição.");
 
             eleitorExistente.Atualizar(eleitor);
 
