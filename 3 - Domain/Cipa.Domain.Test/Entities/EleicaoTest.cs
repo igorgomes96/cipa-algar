@@ -22,7 +22,7 @@ namespace Cipa.Domain.Test.Entities
             return conta;
         }
 
-        private Usuario UsuarioPadrao => new Usuario("teste", "teste@email.com", "Teste", "Teste Cargo") { Conta = ContaPadrao() };
+        private Usuario UsuarioPadrao => new Usuario("teste", "teste@email.com", "Teste", "Teste Cargo", EMetodoAutenticacao.Email) { Conta = ContaPadrao() };
         private Grupo GrupoPadrao()
         {
             var grupo = new Grupo("C-Teste")
@@ -446,12 +446,12 @@ namespace Cipa.Domain.Test.Entities
         {
             var eleicao = CriarEleicao();
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
-            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo");
-            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo");
-            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor 3", "Cargo");
-            var usuario4 = new Usuario("eleitor4", "eleitor4@email.com", "Eleitor 4", "Cargo");
-            var usuario5 = new Usuario("eleitor5", "eleitor5@email.com", "Eleitor 5", "Cargo");
-            var usuario6 = new Usuario("eleitor6", "eleitor6@email.com", "Eleitor 6", "Cargo");
+            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
+            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo", EMetodoAutenticacao.Email);
+            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor 3", "Cargo", EMetodoAutenticacao.Email);
+            var usuario4 = new Usuario("eleitor4", "eleitor4@email.com", "Eleitor 4", "Cargo", EMetodoAutenticacao.Email);
+            var usuario5 = new Usuario("eleitor5", "eleitor5@email.com", "Eleitor 5", "Cargo", EMetodoAutenticacao.Email);
+            var usuario6 = new Usuario("eleitor6", "eleitor6@email.com", "Eleitor 6", "Cargo", EMetodoAutenticacao.Email);
 
             var inscricao1 = eleicao.FazerInscricao(new Eleitor(usuario1) { Id = 1 }, "Objetivos");
             var inscricao2 = eleicao.FazerInscricao(new Eleitor(usuario2) { Id = 2 }, "Objetivos");
@@ -481,8 +481,8 @@ namespace Cipa.Domain.Test.Entities
         public void ExcluirTodosEleitores_ProcessoNaoIniciado_EleitoresExcluidos()
         {
             var eleicao = CriarEleicao();
-            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo");
-            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo");
+            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
+            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo", EMetodoAutenticacao.Email);
             var eleitor1 = new Eleitor(usuario1) { Id = 1 };
             var eleitor2 = new Eleitor(usuario2) { Id = 2 };
 
@@ -497,8 +497,8 @@ namespace Cipa.Domain.Test.Entities
         public void ExcluirTodosEleitores_ProcessoIniciado_ThrowsCustomException()
         {
             var eleicao = CriarEleicao();
-            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo");
-            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo");
+            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
+            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo", EMetodoAutenticacao.Email);
             var eleitor1 = new Eleitor(usuario1) { Id = 1 };
             var eleitor2 = new Eleitor(usuario2) { Id = 2 };
 
@@ -515,9 +515,9 @@ namespace Cipa.Domain.Test.Entities
         public void BuscarEleitor_IdExistente_RetornaEleitor()
         {
             var eleicao = CriarEleicao();
-            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo");
-            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo");
-            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor 3", "Cargo");
+            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
+            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo", EMetodoAutenticacao.Email);
+            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor 3", "Cargo", EMetodoAutenticacao.Email);
 
             var eleitor1 = new Eleitor(usuario1) { Id = 1 };
             var eleitor2 = new Eleitor(usuario2) { Id = 2 };
@@ -536,9 +536,9 @@ namespace Cipa.Domain.Test.Entities
         public void BuscarEleitor_IdInexistente_RetornaNull()
         {
             var eleicao = CriarEleicao();
-            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo");
-            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo");
-            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor 3", "Cargo");
+            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
+            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo", EMetodoAutenticacao.Email);
+            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor 3", "Cargo", EMetodoAutenticacao.Email);
 
             var eleitor1 = new Eleitor(usuario1) { Id = 1 };
             var eleitor2 = new Eleitor(usuario2) { Id = 2 };
@@ -567,7 +567,7 @@ namespace Cipa.Domain.Test.Entities
             List<Eleitor> eleitores = new List<Eleitor>();
             for (int i = 0; i < 6000; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -582,7 +582,7 @@ namespace Cipa.Domain.Test.Entities
             }
 
             // Aprova algumas inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 1; i <= qtdaInscricoesAprovadas; i++)
                 eleicao.AprovarInscricao(i, usuarioAprovador);
 
@@ -606,7 +606,7 @@ namespace Cipa.Domain.Test.Entities
             List<Eleitor> eleitores = new List<Eleitor>();
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -616,7 +616,7 @@ namespace Cipa.Domain.Test.Entities
 
             // Faz as inscrições
             var qtdaInscricoes = 27;
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -676,7 +676,7 @@ namespace Cipa.Domain.Test.Entities
                 {
                     for (int i = 0; i < qtdaEleitores; i++)
                     {
-                        var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                        var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                         var eleitor = new Eleitor(usuario) { Id = i };
                         eleicao.AdicionarEleitor(eleitor);
                         eleitores.Add(eleitor);
@@ -685,7 +685,7 @@ namespace Cipa.Domain.Test.Entities
                 else if (eleicao.EtapaAtual?.EtapaObrigatoriaId == ECodigoEtapaObrigatoria.Inscricao)
                 {
                     // Faz as inscrições
-                    var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+                    var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
                     for (int i = 0; i < qtdaInscricoes; i++)
                     {
                         var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -739,8 +739,8 @@ namespace Cipa.Domain.Test.Entities
         public void AdicionarEleitor_EleitorEmailDuplicado_ThrowsCustomException()
         {
             var eleicao = CriarEleicao();
-            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo");
-            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo");
+            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
+            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo", EMetodoAutenticacao.Email);
 
             var eleitor1 = new Eleitor(usuario1) { Id = 1 };
             var eleitor2 = new Eleitor(usuario2) { Id = 2 };
@@ -758,9 +758,9 @@ namespace Cipa.Domain.Test.Entities
         public void AdicionarEleitor_EleitorLoginDuplicado_ThrowsCustomException()
         {
             var eleicao = CriarEleicao();
-            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo");
-            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo");
-            var usuario3 = new Usuario("eleitor1", "eleitor3@email.com", "Eleitor 3", "Cargo");
+            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
+            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo", EMetodoAutenticacao.Email);
+            var usuario3 = new Usuario("eleitor1", "eleitor3@email.com", "Eleitor 3", "Cargo", EMetodoAutenticacao.Email);
 
             var eleitor1 = new Eleitor(usuario1) { Id = 1 };
             var eleitor2 = new Eleitor(usuario2) { Id = 2 };
@@ -786,7 +786,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -794,7 +794,7 @@ namespace Cipa.Domain.Test.Entities
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -809,7 +809,7 @@ namespace Cipa.Domain.Test.Entities
 
             eleicao.PassarParaProximaEtapa();
 
-            var novoEleitor = new Eleitor(new Usuario("email", "email@email.com", "Teste", "Teste"));
+            var novoEleitor = new Eleitor(new Usuario("email", "email@email.com", "Teste", "Teste", EMetodoAutenticacao.Email));
             var excecao = Assert.Throws<CustomException>(() => eleicao.AdicionarEleitor(novoEleitor));
             Assert.Equal("Não é permitido cadastrar eleitores após o período de votação.", excecao.Message);
         }
@@ -825,7 +825,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -834,7 +834,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -844,7 +844,7 @@ namespace Cipa.Domain.Test.Entities
 
             eleicao.PassarParaProximaEtapa();
 
-            var novoUsuario = new Usuario("teste", "teste@email.com", "Eleitor 1", "Cargo");
+            var novoUsuario = new Usuario("teste", "teste@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
             var novoEleitor = new Eleitor(novoUsuario);
 
             var excecao = Assert.Throws<CustomException>(() => eleicao.AdicionarEleitor(novoEleitor));
@@ -874,7 +874,7 @@ namespace Cipa.Domain.Test.Entities
             var qtdaExcluir = 5;
             for (int i = 0; i < qtdaEleitores + qtdaExcluir; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
             }
@@ -901,7 +901,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -910,7 +910,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -920,7 +920,7 @@ namespace Cipa.Domain.Test.Entities
 
             eleicao.PassarParaProximaEtapa();
 
-            var novoUsuario = new Usuario("teste", "teste@email.com", "Eleitor 1", "Cargo");
+            var novoUsuario = new Usuario("teste", "teste@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
             var novoEleitor = new Eleitor(novoUsuario);
 
             eleicao.AdicionarEleitor(novoEleitor);
@@ -939,7 +939,7 @@ namespace Cipa.Domain.Test.Entities
         {
             var eleicao = CriarEleicao();
 
-            var novoUsuario = new Usuario("teste", "teste@email.com", "Eleitor 1", "Cargo");
+            var novoUsuario = new Usuario("teste", "teste@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
             var novoEleitor = new Eleitor(novoUsuario);
             eleicao.AdicionarEleitor(novoEleitor);
 
@@ -958,7 +958,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -967,7 +967,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -975,7 +975,7 @@ namespace Cipa.Domain.Test.Entities
                 eleicao.AprovarInscricao(inscricao.Id, usuarioAprovador);
             }
 
-            var novoUsuario = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo");
+            var novoUsuario = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
             var novoEleitor = new Eleitor(novoUsuario);
 
             var exception = Assert.Throws<CustomException>(() => eleicao.FazerInscricao(novoEleitor, "Meus Objetivos."));
@@ -993,7 +993,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1002,7 +1002,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1027,7 +1027,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1036,7 +1036,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1044,7 +1044,7 @@ namespace Cipa.Domain.Test.Entities
                 eleicao.AprovarInscricao(inscricao.Id, usuarioAprovador);
             }
 
-            var novoUsuario = new Usuario("eleitorteste", "eleitorteste@email.com", "Eleitor 1", "Cargo");
+            var novoUsuario = new Usuario("eleitorteste", "eleitorteste@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
             var novoEleitor = new Eleitor(novoUsuario) { Id = 1000 };
 
             var exception = Assert.Throws<NotFoundException>(() => eleicao.AtualizarInscricao(novoEleitor.Id, "Meus Objetivos."));
@@ -1062,7 +1062,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1071,7 +1071,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1095,7 +1095,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1104,7 +1104,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1129,7 +1129,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1138,7 +1138,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1161,7 +1161,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1170,7 +1170,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1202,7 +1202,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1211,7 +1211,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1235,7 +1235,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1244,7 +1244,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1267,7 +1267,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1276,7 +1276,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1302,7 +1302,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1310,7 +1310,7 @@ namespace Cipa.Domain.Test.Entities
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1335,7 +1335,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1343,7 +1343,7 @@ namespace Cipa.Domain.Test.Entities
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1365,7 +1365,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1373,7 +1373,7 @@ namespace Cipa.Domain.Test.Entities
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1397,7 +1397,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1405,7 +1405,7 @@ namespace Cipa.Domain.Test.Entities
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1434,7 +1434,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1442,7 +1442,7 @@ namespace Cipa.Domain.Test.Entities
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
             for (int i = 0; i < qtdaInscricoes; i++)
             {
                 var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(i), "Objetivos");
@@ -1476,7 +1476,7 @@ namespace Cipa.Domain.Test.Entities
         public void ExcluirEleitor_EleitorNaoInscritoJaVotou_ThrowsCustomException()
         {
             var eleicao = CriarEleicao();
-            var usuario = new Usuario("eleitor", "eleitor@email.com", "Eleitor", "Cargo");
+            var usuario = new Usuario("eleitor", "eleitor@email.com", "Eleitor", "Cargo", EMetodoAutenticacao.Email);
             var eleitor = new Eleitor(usuario) { Id = 1 };
             eleicao.AdicionarEleitor(eleitor);
 
@@ -1492,14 +1492,14 @@ namespace Cipa.Domain.Test.Entities
         public void ExcluirEleitor_InscricaoReprovadaEleitorJaVotou_ThrowsCustomException()
         {
             var eleicao = CriarEleicao();
-            var usuario = new Usuario("eleitor", "eleitor@email.com", "Eleitor", "Cargo");
+            var usuario = new Usuario("eleitor", "eleitor@email.com", "Eleitor", "Cargo", EMetodoAutenticacao.Email);
             var eleitor = new Eleitor(usuario) { Id = 1 };
             eleicao.AdicionarEleitor(eleitor);
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
 
             var inscricao = eleicao.FazerInscricao(eleitor, "Objetivos");
             inscricao.Id = 1;
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Cargo Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Cargo Aprovador", EMetodoAutenticacao.Email);
             eleicao.ReprovarInscricao(inscricao.Id, usuarioAprovador, "Motivo Reprovação");
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Votacao);
@@ -1513,7 +1513,7 @@ namespace Cipa.Domain.Test.Entities
         public void ExcluirEleitor_EleitorInscritoAprovadoOuPendente_ThrowsCustomException()
         {
             var eleicao = CriarEleicao();
-            var usuario = new Usuario("eleitor", "eleitor@email.com", "Eleitor", "Cargo");
+            var usuario = new Usuario("eleitor", "eleitor@email.com", "Eleitor", "Cargo", EMetodoAutenticacao.Email);
             var eleitor = new Eleitor(usuario) { Id = 1 };
             eleicao.AdicionarEleitor(eleitor);
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
@@ -1524,7 +1524,7 @@ namespace Cipa.Domain.Test.Entities
             var exception = Assert.Throws<CustomException>(() => eleicao.ExcluirEleitor(eleitor));
             Assert.Equal("Não é possível excluir esse eleitor pois ele é um dos inscritos nessa eleição!", exception.Message);
 
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Cargo Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Cargo Aprovador", EMetodoAutenticacao.Email);
             eleicao.AprovarInscricao(inscricao.Id, usuarioAprovador);
 
             exception = Assert.Throws<CustomException>(() => eleicao.ExcluirEleitor(eleitor));
@@ -1535,7 +1535,7 @@ namespace Cipa.Domain.Test.Entities
         public void ExcluirEleitor_EleitorNaoEncontrado_ThrowsNotFoundException()
         {
             var eleicao = CriarEleicao();
-            var usuario = new Usuario("eleitor", "eleitor@email.com", "Eleitor", "Cargo");
+            var usuario = new Usuario("eleitor", "eleitor@email.com", "Eleitor", "Cargo", EMetodoAutenticacao.Email);
             var eleitor = new Eleitor(usuario) { Id = 1 };
             var exception = Assert.Throws<NotFoundException>(() => eleicao.ExcluirEleitor(eleitor));
             Assert.Equal("Eleitor não encontrado.", exception.Message);
@@ -1545,13 +1545,13 @@ namespace Cipa.Domain.Test.Entities
         public void ExcluirEleitor_EleitorPodeSerExcluido_RetornaTrueExcluiEleitor()
         {
             var eleicao = CriarEleicao();
-            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor1", "Cargo");
+            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor1", "Cargo", EMetodoAutenticacao.Email);
             var eleitor1 = new Eleitor(usuario1) { Id = 1 };
             eleicao.AdicionarEleitor(eleitor1);
-            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor2", "Cargo");
+            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor2", "Cargo", EMetodoAutenticacao.Email);
             var eleitor2 = new Eleitor(usuario2) { Id = 2 };
             eleicao.AdicionarEleitor(eleitor2);
-            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor3", "Cargo");
+            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor3", "Cargo", EMetodoAutenticacao.Email);
             var eleitor3 = new Eleitor(usuario3) { Id = 3 };
             eleicao.AdicionarEleitor(eleitor3);
 
@@ -1579,7 +1579,7 @@ namespace Cipa.Domain.Test.Entities
             List<Eleitor> eleitores = new List<Eleitor>();
             for (int i = 0; i < 51; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1615,7 +1615,7 @@ namespace Cipa.Domain.Test.Entities
             List<Eleitor> eleitores = new List<Eleitor>();
             for (int i = 0; i < 10; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1624,7 +1624,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
             var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(0), "Objetivos");
             inscricao.Id = 1;
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Cargo Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Cargo Aprovador", EMetodoAutenticacao.Email);
             eleicao.AprovarInscricao(inscricao.Id, usuarioAprovador);
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Votacao);
@@ -1649,7 +1649,7 @@ namespace Cipa.Domain.Test.Entities
             List<Eleitor> eleitores = new List<Eleitor>();
             for (int i = 0; i < 10; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1658,7 +1658,7 @@ namespace Cipa.Domain.Test.Entities
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
             var inscricao = eleicao.FazerInscricao(eleitores.ElementAt(0), "Objetivos");
             inscricao.Id = 1;
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Cargo Aprovador");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Cargo Aprovador", EMetodoAutenticacao.Email);
             eleicao.AprovarInscricao(inscricao.Id, usuarioAprovador);
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Votacao);
@@ -1693,7 +1693,7 @@ namespace Cipa.Domain.Test.Entities
 
             for (int i = 0; i < qtdaEleitores; i++)
             {
-                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo");
+                var usuario = new Usuario($"eleitor{i}", $"eleitor{i}@email.com", $"Eleitor {i}", "Cargo", EMetodoAutenticacao.Email);
                 var eleitor = new Eleitor(usuario) { Id = i };
                 eleicao.AdicionarEleitor(eleitor);
                 eleitores.Add(eleitor);
@@ -1701,10 +1701,10 @@ namespace Cipa.Domain.Test.Entities
 
             PassarEtapaAte(eleicao, ECodigoEtapaObrigatoria.Inscricao);
             // Faz as inscrições
-            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador");
-            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo");
-            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo");
-            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor 3", "Cargo");
+            var usuarioAprovador = new Usuario("aprovador", "aprovador@email.com", "Aprovador", "Aprovador", EMetodoAutenticacao.Email);
+            var usuario1 = new Usuario("eleitor1", "eleitor1@email.com", "Eleitor 1", "Cargo", EMetodoAutenticacao.Email);
+            var usuario2 = new Usuario("eleitor2", "eleitor2@email.com", "Eleitor 2", "Cargo", EMetodoAutenticacao.Email);
+            var usuario3 = new Usuario("eleitor3", "eleitor3@email.com", "Eleitor 3", "Cargo", EMetodoAutenticacao.Email);
 
             var inscricao1 = eleicao.FazerInscricao(new Eleitor(usuario1) { Id = 1 }, "Meus objetivos");
             inscricao1.Id = 1;

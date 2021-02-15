@@ -29,6 +29,8 @@ namespace Cipa.Domain.Entities
         public string NomeGestor { get; set; }
         public string EmailGestor { get; set; }
 
+        public bool PossuiEmail => !string.IsNullOrWhiteSpace(Email);
+
         public virtual Eleicao Eleicao { get; private set; }
         public virtual Usuario Usuario { get; set; }
         public virtual Inscricao Inscricao { get; private set; }

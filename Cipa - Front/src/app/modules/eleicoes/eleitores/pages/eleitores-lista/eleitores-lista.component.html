@@ -81,6 +81,7 @@
       <thead>
         <tr>
           <th>Nome</th>
+          <th>Login</th>
           <th>E-mail</th>
           <th>Admissão</th>
           <th class="text-right"></th>
@@ -89,6 +90,7 @@
       <tbody>
         <tr *ngFor="let eleitor of eleitores.result">
           <td>{{ eleitor.nome }}</td>
+          <td>{{ eleitor.login }}</td>
           <td>{{ eleitor.email }}</td>
           <td>{{ eleitor.dataAdmissao | date:'dd/MM/yyyy' }}</td>
           <td class="text-right">

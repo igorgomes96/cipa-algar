@@ -51,11 +51,12 @@ namespace Cipa.WebApi
             services.AddDbContext<CipaContext>(options =>
             {
                 options.UseLazyLoadingProxies();
-                options.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
-                    b => b.MigrationsAssembly("Cipa.WebApi"));
+                options.UseMySql(Configuration.GetConnectionString("MySqlConnection"));
+                // options.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
+                //     b => b.MigrationsAssembly("Cipa.WebApi"));
             });
 
-            var signingConfigurations = new SigningConfigurations();
+            var signingConfigurations = new SigningConfigurations(Configuration.GetSection("TokenConfigurations:Secret").Value);
             services.AddSingleton(signingConfigurations);
 
             var tokenConfigurations = new TokenConfigurations();
@@ -161,7 +162,7 @@ namespace Cipa.WebApi
 
             app.UseHttpErrorMiddleware();
 
-            app.UseHsts();
+            // app.UseHsts();
 
             notificacaoProgressoEvent.NotificacaoProgresso += (object sender, ProgressoImportacaoEventArgs args) =>
             {
@@ -173,7 +174,7 @@ namespace Cipa.WebApi
                 hubContext.Clients.User(args.EmailUsuario).SendAsync("importacaofinalizada", mapper.Map<FinalizacaoImportacaoStatusViewModel>(args));
             };
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseResponseCompression();
             app.UseDefaultFiles();
             app.UseStaticFiles();

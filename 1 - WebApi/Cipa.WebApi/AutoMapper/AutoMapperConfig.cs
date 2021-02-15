@@ -70,7 +70,7 @@ namespace Cipa.WebApi.AutoMapper
                 cfg.CreateMap<EtapaPadraoConta, EtapaPadraoContaViewModel>().ReverseMap();
                 cfg.CreateMap<Usuario, UsuarioViewModel>()
                     .ReverseMap()
-                    .ConvertUsing(dest => new Usuario(dest.Login, dest.Email, dest.Nome, dest.Cargo));
+                    .ConvertUsing((dest, _, ctx) => new Usuario(dest.Login, dest.Email, dest.Nome, dest.Cargo, ctx.Mapper.Map<EMetodoAutenticacao>(dest.MetodoAutenticacao)));
                 cfg.CreateMap<Conta, ContaViewModel>();
                 cfg.CreateMap<Conta, ContaDetalhesViewModel>();
                 cfg.CreateMap<IEnumerable<Inscricao>, ResultadoApuracaoViewModel>()

@@ -10,11 +10,19 @@ namespace Cipa.Infra.Data.EntityConfig
         {
             builder.HasKey(e => e.Id);
 
+            builder.Ignore(e => e.PossuiEmail);
+
             builder.Property(e => e.Nome)
                 .HasMaxLength(255)
                 .IsRequired();
 
+            builder.Property(e => e.MetodoAutenticacao)
+                .IsRequired();
+
             builder.Property(e => e.Email)
+                .HasMaxLength(100);
+
+            builder.Property(e => e.Login)
                 .HasMaxLength(100)
                 .IsRequired();
 

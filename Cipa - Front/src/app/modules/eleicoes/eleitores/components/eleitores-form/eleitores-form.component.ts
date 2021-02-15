@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Eleitor } from '@shared/models/eleitor';
+import { Eleitor, MetodoAutenticacao } from '@shared/models/eleitor';
 
 @Component({
   selector: 'app-eleitores-form',
@@ -13,11 +13,13 @@ export class EleitoresFormComponent implements OnInit {
   @Output() salvar = new EventEmitter<Eleitor>();
   @Output() cancelar = new EventEmitter<void>();
 
+  MetodoAutenticacao = MetodoAutenticacao;
   constructor() { }
 
   ngOnInit() {
     if (!this.eleitor) {
       this.eleitor = new Eleitor();
+      this.eleitor.metodoAutenticacao = MetodoAutenticacao.UsuarioRede;
     }
   }
 
@@ -26,6 +28,9 @@ export class EleitoresFormComponent implements OnInit {
   }
 
   submit() {
+    if (this.eleitor.metodoAutenticacao == MetodoAutenticacao.Email) {
+      this.eleitor.login = this.eleitor.email;
+    }
     this.salvar.emit(this.eleitor);
   }
 

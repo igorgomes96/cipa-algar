@@ -30,6 +30,7 @@ namespace Cipa.Domain.Helpers
         public const string DataNascimento = "Data de Nascimento";
         public const string NomeGestor = "Nome do Gestor";
         public const string EmailGestor = "Email do Gestor";
+        public const string MetodoAutenticacao = "Realizar login via:";
     }
 
 

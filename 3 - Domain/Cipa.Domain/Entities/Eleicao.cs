@@ -308,7 +308,7 @@ namespace Cipa.Domain.Entities
 
         public Eleitor BuscarEleitor(int id) => Eleitores.FirstOrDefault(e => e.Id == id);
 
-        public Eleitor BuscarEleitorPeloEmail(string email) => Eleitores.FirstOrDefault(e => e.Email == email);
+        public Eleitor BuscarEleitorPeloLogin(string login) => Eleitores.FirstOrDefault(e => e.Login == login);
 
         public Eleitor BuscarEleitorPeloUsuarioId(int id) => Eleitores.FirstOrDefault(e => e.UsuarioId == id);
 
@@ -374,7 +374,7 @@ namespace Cipa.Domain.Entities
             if (JaUltrapassouEtapa(ECodigoEtapaObrigatoria.Votacao))
                 throw new CustomException("Não é permitido cadastrar eleitores após o período de votação.");
 
-            if (!string.IsNullOrWhiteSpace(eleitor.Email) && Eleitores.Any(e => e.Email == eleitor.Email))
+            if (eleitor.PossuiEmail && Eleitores.Any(e => e.Email == eleitor.Email))
                 throw new CustomException("Já existe um eleitor cadastrado com o mesmo e-mail para essa eleição.");
 
             if (Eleitores.Any(e => e.Login == eleitor.Login))
@@ -518,7 +518,7 @@ namespace Cipa.Domain.Entities
             IEnumerable<Inscricao> apuracao = OrdenarInscricoesPorQtdaVotos();
 
             var qtdaVotosEmBranco = Votos.Count - Inscricoes.Sum(i => i.Votos);
-            var usuarioEmBranco = new Usuario("(Em Branco)", "(Em Branco)", "(Em Branco)", "(Em Branco)");
+            var usuarioEmBranco = new Usuario("(Em Branco)", "(Em Branco)", "(Em Branco)", "(Em Branco)", EMetodoAutenticacao.Email);
             var votosEmBranco = new Inscricao(this, new Eleitor(usuarioEmBranco), "(Em Branco)")
             {
                 Votos = qtdaVotosEmBranco
@@ -553,7 +553,7 @@ namespace Cipa.Domain.Entities
             var eleitorExistente = BuscarEleitor(eleitor.Id);
             if (eleitorExistente == null) throw new NotFoundException("Eleitor não encontrado.");
 
-            if (eleitorExistente.Email != eleitor.Email && Eleitores.Any(e => e.Email == eleitor.Email))
+            if (eleitorExistente.Email != eleitor.Email && eleitor.PossuiEmail && Eleitores.Any(e => e.Email == eleitor.Email))
                 throw new CustomException("Já existe um eleitor cadastrado com o mesmo e-mail para essa eleição.");
 
             if (eleitorExistente.Login != eleitor.Login && Eleitores.Any(e => e.Login == eleitor.Login))

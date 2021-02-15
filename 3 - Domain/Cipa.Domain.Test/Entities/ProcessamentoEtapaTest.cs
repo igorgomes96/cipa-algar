@@ -28,7 +28,7 @@ namespace Cipa.Domain.Test.Entities
             conta.AdicionarEtapaPadrao(new EtapaPadraoConta("Convocação", "Convocação", 1, conta.Id, 1, ECodigoEtapaObrigatoria.Convocacao));
             conta.AdicionarEtapaPadrao(new EtapaPadraoConta("Inscrição", "Inscrição", 2, conta.Id, 2, ECodigoEtapaObrigatoria.Inscricao));
             conta.AdicionarEtapaPadrao(new EtapaPadraoConta("Votação", "Votação", 3, conta.Id, 1, ECodigoEtapaObrigatoria.Votacao));
-            var usuarioCriacao = new Usuario("gestor", "gestor@email.com", "Gestor", "Técnico do SESMT")
+            var usuarioCriacao = new Usuario("gestor", "gestor@email.com", "Gestor", "Técnico do SESMT", EMetodoAutenticacao.Email)
             {
                 Conta = conta
             };

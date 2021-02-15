@@ -7,6 +7,7 @@ export enum Perfil {
 export class Usuario {
   id: number;
   nome: string;
+  login?: string;
   email: string;
   senha: string;
   confirmacaoSenha: string;
@@ -22,6 +23,7 @@ export class AuthInfo {
   qtdaMaxEstabelecimentos: number;
   expiracao: Date;
   email: string;
+  login?: string;
   perfil: Perfil;
   nomePlano: string;
 }

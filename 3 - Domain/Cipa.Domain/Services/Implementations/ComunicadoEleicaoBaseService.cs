@@ -28,10 +28,13 @@ namespace Cipa.Domain.Services.Implementations
 
         protected Eleicao Eleicao { get; private set; }
 
+        protected IEnumerable<Eleitor> EleitoresComEmail =>
+            Eleicao.Eleitores.Where(e => !string.IsNullOrWhiteSpace(e.Usuario.Email)); 
+
         protected IEnumerable<Usuario> UsuariosComSenhaCadastrada =>
-            Eleicao.Eleitores.Where(e => e.Usuario.JaCadastrouSenha).Select(e => e.Usuario);
+            EleitoresComEmail.Where(e => e.Usuario.JaCadastrouSenha).Select(e => e.Usuario);
         protected IEnumerable<Usuario> UsuariosSemSenhaCadastrada =>
-            Eleicao.Eleitores.Where(e => !e.Usuario.JaCadastrouSenha).Select(e => e.Usuario);
+            EleitoresComEmail.Where(e => !e.Usuario.JaCadastrouSenha).Select(e => e.Usuario);
 
         protected string RetornarDataFimInscricao()
         {

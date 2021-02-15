@@ -25,7 +25,7 @@ namespace Cipa.Infra.Data.EntityConfig
                 .HasMaxLength(255)
                 .IsRequired();
 
-            builder.Property(a => a.EmailUsuario)
+            builder.Property(a => a.LoginUsuario)
                 .HasMaxLength(100)
                 .IsRequired();
 

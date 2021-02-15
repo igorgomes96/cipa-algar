@@ -24,8 +24,8 @@ namespace Cipa.Application
             _emailConfiguration = emailConfiguration;
         }
 
-        public Usuario BuscarUsuario(string email, string senha) =>
-            (_repositoryBase as IUsuarioRepository).BuscarUsuario(email, senha);
+        public Usuario BuscarUsuario(string login, string senha) =>
+            (_repositoryBase as IUsuarioRepository).BuscarUsuario(login, senha);
 
         public IEnumerable<Usuario> BuscarUsuariosPelaConta(int contaId) =>
             (_repositoryBase as IUsuarioRepository).BuscarUsuariosPelaConta(contaId);
@@ -46,18 +46,25 @@ namespace Cipa.Application
             usuario.Email = usuario.Email.Trim().ToLower();
             var conta = _unitOfWork.ContaRepository.BuscarPeloId(usuario.ContaId.Value);
             if (conta == null) throw new NotFoundException("Conta não encontrada.");
-            var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(usuario.Email);
+            var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloLogin(usuario.Login);
+
             if (usuarioExistente != null)
             {
                 if (usuarioExistente.Perfil == PerfilUsuario.SESMT || usuarioExistente.Perfil == PerfilUsuario.Administrador)
-                    throw new DuplicatedException($"Já há um usuário cadastrado com o e-mail '{usuario.Email}'.");
+                    throw new DuplicatedException($"Já há um usuário cadastrado com login '{usuario.Login}'.");
                 else
                 {
+                    var usuarioEmail = (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(usuario.Email);
+                    if (usuarioEmail.Id != usuarioExistente.Id)
+                    {
+                        throw new DuplicatedException($"Já há um usuário cadastrado com o e-mail '{usuario.Email}'.");
+                    }
                     usuarioExistente.AlterarParaPerfilSESMT(conta);
                     base.Atualizar(usuarioExistente);
                     return usuarioExistente;
                 }
             }
+
             usuario.Conta = conta;
             usuario.ContaId = conta.Id;
             EnviarEmail(usuario, ETipoTemplateEmail.CadastroSESMT);
@@ -69,10 +76,15 @@ namespace Cipa.Application
             var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarPeloId(usuario.Id);
             if (usuarioExistente == null) throw new NotFoundException("Usuário não encontrado.");
             usuario.Email = usuario.Email.Trim().ToLower();
-            if (usuario.Email != usuarioExistente.Email && (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(usuario.Email) != null)
-                throw new DuplicatedException($"Já há um usuário cadastrado com o e-mail '{usuario.Email}'.");
+            if (usuario.Login != usuarioExistente.Login && (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloLogin(usuario.Login) != null)
+                throw new DuplicatedException($"Já há um usuário cadastrado com o login '{usuario.Login}'.");
+
+            if (usuario.Email != usuarioExistente.Email && (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloLogin(usuario.Email) != null)
+                throw new DuplicatedException($"Já há um usuário cadastrado com o email '{usuario.Email}'.");
+
             usuarioExistente.Cargo = usuario.Cargo;
-            usuarioExistente.Email = usuario.Email.Trim().ToLower();
+            usuarioExistente.Email = usuario?.Email?.Trim()?.ToLower();
+            usuarioExistente.Login = usuario.Login.Trim();
             usuarioExistente.Nome = usuario.Nome;
             usuarioExistente.Perfil = usuario.Perfil;
             base.Atualizar(usuarioExistente);
@@ -90,13 +102,18 @@ namespace Cipa.Application
                     usuario.ContaId = null;
             }
 
-            var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(usuario.Email);
+            var usuarioExistente = (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloLogin(usuario.Login);
             if (usuarioExistente != null)
             {
                 if (usuarioExistente.Perfil == PerfilUsuario.Administrador)
-                    throw new DuplicatedException($"Já há um usuário cadastrado com o e-mail '{usuario.Email}'.");
+                    throw new DuplicatedException($"Já há um usuário cadastrado com o login '{usuario.Login}'.");
                 else
                 {
+                    var usuarioEmail = (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(usuario.Email);
+                    if (usuarioEmail.Id != usuarioExistente.Id)
+                    {
+                        throw new DuplicatedException($"Já há um usuário cadastrado com o e-mail '{usuario.Email}'.");
+                    }
                     usuarioExistente.AlterarParaPerfilAdministrador();
                     base.Atualizar(usuarioExistente);
                     return usuarioExistente;

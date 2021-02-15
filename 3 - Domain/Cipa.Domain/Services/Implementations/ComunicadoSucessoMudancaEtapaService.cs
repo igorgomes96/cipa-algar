@@ -18,8 +18,9 @@ namespace Cipa.Domain.Services.Implementations
 
         protected override ICollection<Email> FormatarEmailPadrao(TemplateEmail templateEmail)
         {
-            var usuariosSESMST = Eleicao.Conta.Usuarios
+            var usuariosSESMST = Eleicao.Conta.Usuarios.Where(u => !string.IsNullOrWhiteSpace(u.Email))
                 .Select(x => x.Email).Aggregate((i, j) => $"{i},{j}");
+            if (string.IsNullOrWhiteSpace(usuariosSESMST)) return new Email[0];
             var mensagem = SubstituirParametrosTemplate(templateEmail.Template);
             return new List<Email> {
                 new Email(usuariosSESMST, null, templateEmail.Assunto, mensagem)

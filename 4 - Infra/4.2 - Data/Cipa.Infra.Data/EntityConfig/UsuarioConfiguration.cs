@@ -10,9 +10,13 @@ namespace Cipa.Infra.Data.EntityConfig
         {
             builder.HasKey(u => u.Id);
 
-            builder.Property(u => u.Email)
-                .HasMaxLength(100)
+            builder.Ignore(e => e.PossuiEmail);
+
+            builder.Property(e => e.MetodoAutenticacao)
                 .IsRequired();
+
+            builder.Property(u => u.Email)
+                .HasMaxLength(100);
 
             builder.Property(u => u.Nome)
                 .HasMaxLength(255)
@@ -20,6 +24,10 @@ namespace Cipa.Infra.Data.EntityConfig
 
             builder.Property(u => u.Senha)
                 .HasMaxLength(255);
+
+            builder.Property(u => u.Login)
+                .HasMaxLength(100)
+                .IsRequired();
 
             builder.HasOne(u => u.Conta)
                 .WithMany(c => c.Usuarios)
@@ -32,6 +40,7 @@ namespace Cipa.Infra.Data.EntityConfig
             builder.Property(u => u.Cargo)
                 .HasMaxLength(255);
 
+            builder.HasIndex(u => u.Login).IsUnique();
             builder.HasIndex(u => u.Email).IsUnique();
         }
     }

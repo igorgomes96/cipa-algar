@@ -8,7 +8,6 @@ namespace Cipa.WebApi.ViewModels
         public int Id { get; set; }
         [EmailAddress(ErrorMessage = "E-mail em formato inválido.")]
         [StringLength(100, ErrorMessage = "O e-mail pode conter no máximo {1} caracteres.")]
-        [Required(ErrorMessage = "O e-mail do usuário deve ser informado.")]
         public string Email { get; set; }
         [StringLength(100, ErrorMessage = "O login pode conter no máximo {1} caracteres.")]
         [Required(ErrorMessage = "O login do usuário deve ser informado.")]
@@ -20,5 +19,6 @@ namespace Cipa.WebApi.ViewModels
         public string Cargo { get; set; }
         public Guid? CodigoRecuperacao { get; set; }
         public string Senha { get; set; }
+        public int MetodoAutenticacao { get; set; }
     }
 }

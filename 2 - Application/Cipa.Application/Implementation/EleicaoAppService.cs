@@ -191,7 +191,11 @@ namespace Cipa.Application
 
             var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloLogin(eleitor.Login);
             if (usuario == null)
-                usuario = new Usuario(eleitor.Login, eleitor.Email, eleitor.Nome, eleitor.Cargo);
+                usuario = new Usuario(eleitor.Login, eleitor.Email, eleitor.Nome, eleitor.Cargo, eleitor.MetodoAutenticacao);
+            else {
+                usuario.MetodoAutenticacao = eleitor.MetodoAutenticacao;
+                usuario.Email = eleitor.Email;
+            }
 
             eleitor.Usuario = usuario;
 
@@ -336,9 +340,13 @@ namespace Cipa.Application
             var eleicao = _unitOfWork.EleicaoRepository.BuscarPeloId(eleicaoId);
             if (eleicao == null) throw new NotFoundException("Eleição não encontrada.");
 
-            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloEmail(eleitor.Email);
+            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloLogin(eleitor.Login);
             if (usuario == null)
-                usuario = new Usuario(eleitor.Login, eleitor.Email, eleitor.Nome, eleitor.Cargo);
+                usuario = new Usuario(eleitor.Login, eleitor.Email, eleitor.Nome, eleitor.Cargo, eleitor.MetodoAutenticacao);
+            else {
+                usuario.MetodoAutenticacao = eleitor.MetodoAutenticacao;
+                usuario.Email = eleitor.Email;
+            }
 
             eleitor.Usuario = usuario;
 
@@ -390,18 +398,19 @@ namespace Cipa.Application
             File.WriteAllBytes(originalFileName, foto);
 
             // Converte para JPEG, com 80% da qualidade
-            string destinationFileName = FileSystemHelpers.GetRelativeFileName(relativePath, Path.ChangeExtension(fotoFileName, ".jpeg"));
+            /*string destinationFileName = FileSystemHelpers.GetRelativeFileName(relativePath, Path.ChangeExtension(fotoFileName, ".jpeg"));
             ImageHelpers.SalvarImagemJPEG(originalFileName, @FileSystemHelpers.GetAbsolutePath(destinationFileName), 80);
 
             // Exclui o arquivo orginal
-            File.Delete(originalFileName);
+            File.Delete(originalFileName);*/
 
             if (!string.IsNullOrWhiteSpace(inscricao.Foto))
             {
                 var fotoAnterior = FileSystemHelpers.GetAbsolutePath(inscricao.Foto);
                 if (File.Exists(fotoAnterior)) File.Delete(FileSystemHelpers.GetAbsolutePath(inscricao.Foto));
             }
-            inscricao.Foto = destinationFileName;
+            // inscricao.Foto = destinationFileName;
+            inscricao.Foto = originalFileName;
             base.Atualizar(eleicao);
             return inscricao;
         }
@@ -441,7 +450,7 @@ namespace Cipa.Application
             if (usuario == null) throw new CustomException("Usuário inválido!");
 
             var arquivo = _arquivoAppService.SalvarArquivo(
-                DependencyFileType.Importacao, eleicao.Id, usuario.Email, usuario.Nome,
+                DependencyFileType.Importacao, eleicao.Id, usuario.Login, usuario.Nome,
                 conteudoArquivo, nomeArquivo, contentType);
 
             ValidaFormatoPlanilha(arquivo.Path);
@@ -461,7 +470,7 @@ namespace Cipa.Application
             if (usuario == null) throw new CustomException("Usuário inválido!");
 
             return _arquivoAppService.SalvarArquivo(
-                DependencyFileType.DocumentoCronograma, etapaId, usuario.Email, usuario.Nome,
+                DependencyFileType.DocumentoCronograma, etapaId, usuario.Login, usuario.Nome,
                 conteudoArquivo, nomeArquivo, contentType);
         }
 

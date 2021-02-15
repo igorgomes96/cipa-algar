@@ -97,10 +97,12 @@ namespace Cipa.Application
                 var login = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Login, validators[ColunasArquivo.Login]).Trim();
                 var email = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Email, validators[ColunasArquivo.Email]).Trim().ToLower();
                 var cargo = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Cargo, validators[ColunasArquivo.Cargo])?.Trim();
-                
+                var realizarLoginVia = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.MetodoAutenticacao, validators[ColunasArquivo.MetodoAutenticacao])?.Trim();
+                var metodoAutenticacao = realizarLoginVia == "E-mail" ? EMetodoAutenticacao.Email : EMetodoAutenticacao.UsuarioRede;
+
                 var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloEmail(email);
                 if (usuario == null)
-                    usuario = new Usuario(login, email, nome, cargo);
+                    usuario = new Usuario(login, email, nome, cargo, metodoAutenticacao);
 
                 var eleitor = new Eleitor(usuario)
                 {
@@ -138,11 +140,11 @@ namespace Cipa.Application
                 base.Atualizar(importacao);
                 var arquivoImportacao = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), importacao.Arquivo.Path);
                 var dataTable = _excelService.LerTabela(arquivoImportacao, LINHA_INICIAL_ARQUIVO, 10);
-                var inconsistencias = ValidarFormatoDataTable(dataTable, importacao.Arquivo.EmailUsuario);
+                var inconsistencias = ValidarFormatoDataTable(dataTable, importacao.Arquivo.LoginUsuario);
 
                 if (!FinalizarImportacaoComErro(importacao, inconsistencias))
                 {
-                    var eleitores = ConverterParaListaDeEleitor(dataTable, importacao.Arquivo.EmailUsuario);
+                    var eleitores = ConverterParaListaDeEleitor(dataTable, importacao.Arquivo.LoginUsuario);
                     inconsistencias = RetornarInconsistenciasEmailsDuplicados(eleitores);
 
                     if (!FinalizarImportacaoComErro(importacao, inconsistencias))
@@ -178,7 +180,7 @@ namespace Cipa.Application
                     {
                         Status = StatusImportacao.FinalizadoComFalha,
                         QtdaErros = inconsistencias.Count(),
-                        EmailUsuario = importacao.Arquivo.EmailUsuario
+                        EmailUsuario = importacao.Arquivo.LoginUsuario
                     });
                 return true;
             }
@@ -194,7 +196,7 @@ namespace Cipa.Application
                 {
                     Status = StatusImportacao.FinalizadoComSucesso,
                     QtdaErros = 0,
-                    EmailUsuario = importacao.Arquivo.EmailUsuario
+                    EmailUsuario = importacao.Arquivo.LoginUsuario
                 });
         }
 
@@ -212,7 +214,7 @@ namespace Cipa.Application
 
         private void SalvarEleitor(Eleicao eleicao, Eleitor eleitor)
         {
-            var eleitorCadastrado = eleicao.BuscarEleitorPeloEmail(eleitor.Email);
+            var eleitorCadastrado = eleicao.BuscarEleitorPeloLogin(eleitor.Login);
             if (eleitorCadastrado == null)
                 eleicao.AdicionarEleitor(eleitor);
             else

@@ -31,10 +31,10 @@ namespace Cipa.WebApi.Authentication
             _contaAppService = contaAppService;
         }
 
-        private Usuario ValidaUsuario(string email, string senha)
+        private Usuario ValidaUsuario(string login, string senha)
         {
             senha = CryptoService.ComputeSha256Hash(senha);
-            var usuario = _usuarioAppService.BuscarUsuario(email, senha);
+            var usuario = _usuarioAppService.BuscarUsuario(login, senha);
             if (usuario == null) throw new CustomException("Credenciais inválidas!");
             return usuario;
         }
@@ -42,7 +42,7 @@ namespace Cipa.WebApi.Authentication
         public ClaimsIdentity GeraIdentity(Usuario usuario, Conta conta)
         {
             ClaimsIdentity identity = new ClaimsIdentity(
-                    new GenericIdentity(usuario.Email, "Login"),
+                    new GenericIdentity(usuario.Login, "Login"),
                     new[] {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
                         new Claim(CustomClaimTypes.NomeUsuario, usuario.Nome),
@@ -50,6 +50,12 @@ namespace Cipa.WebApi.Authentication
                         new Claim(CustomClaimTypes.UsuarioId, usuario.Id.ToString())
                     }
                 );
+
+            if (usuario.PossuiEmail)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Email, usuario.Email));
+            }
+
             if (conta != null)
             {
                 identity.AddClaims(
@@ -75,9 +81,9 @@ namespace Cipa.WebApi.Authentication
             return GerarToken(usuario, identity);
         }
 
-        public AuthInfoViewModel Login(string email, string senha)
+        public AuthInfoViewModel Login(string login, string senha)
         {
-            var usuarioBanco = ValidaUsuario(email, senha);
+            var usuarioBanco = ValidaUsuario(login, senha);
             var identity = GeraIdentity(usuarioBanco, usuarioBanco.Conta);
             return GerarToken(usuarioBanco, identity);
         }
@@ -105,14 +111,15 @@ namespace Cipa.WebApi.Authentication
                 Criacao = dataCriacao,
                 Expiracao = dataExpiracao,
                 Roles = identity.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToArray(),
-                UsuarioEmail = usuario.Email
+                UsuarioEmail = usuario.Email,
+                Login = usuario.Login
             };
         }
 
         public AuthInfoViewModel CadastrarNovaSenha(Guid codigoRecuperacao, string senha)
         {
             var usuario = _usuarioAppService.CadastrarNovaSenha(codigoRecuperacao, CryptoService.ComputeSha256Hash(senha));
-            return Login(usuario.Email, senha);
+            return Login(usuario.Login, senha);
         }
 
         public void ResetarSenha(string email)
