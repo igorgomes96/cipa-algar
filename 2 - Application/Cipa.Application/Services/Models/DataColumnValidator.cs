@@ -44,7 +44,7 @@ namespace Cipa.Application.Services.Models
                     {
                         return $"A {ColumnName} deve ter no mínimo {MinLength} caracteres.";
                     }
-                    if (DataType == DataType.Email)
+                    if (DataType == DataType.Email && !string.IsNullOrWhiteSpace(stringValue))
                     {
                         var emailValido = Util.EmailEhValido(stringValue);
                         if (!emailValido) return "O email está em formato inválido.";
@@ -87,9 +87,9 @@ namespace Cipa.Application.Services.Models
             switch (DataType)
             {
                 case DataType.String:
-                    return value.ToString();
+                    return value?.ToString();
                 case DataType.Email:
-                    return value.ToString().Trim().ToLower();
+                    return value?.ToString()?.Trim()?.ToLower();
                 case DataType.Decimal:
                     return decimal.Parse(value.ToString());
                 case DataType.Int:

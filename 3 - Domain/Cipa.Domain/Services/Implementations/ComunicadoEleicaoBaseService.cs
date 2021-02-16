@@ -32,9 +32,9 @@ namespace Cipa.Domain.Services.Implementations
             Eleicao.Eleitores.Where(e => !string.IsNullOrWhiteSpace(e.Usuario.Email)); 
 
         protected IEnumerable<Usuario> UsuariosComSenhaCadastrada =>
-            EleitoresComEmail.Where(e => e.Usuario.JaCadastrouSenha).Select(e => e.Usuario);
+            EleitoresComEmail.Where(e => e.Usuario.JaCadastrouSenha || e.MetodoAutenticacao == EMetodoAutenticacao.UsuarioRede).Select(e => e.Usuario);
         protected IEnumerable<Usuario> UsuariosSemSenhaCadastrada =>
-            EleitoresComEmail.Where(e => !e.Usuario.JaCadastrouSenha).Select(e => e.Usuario);
+            EleitoresComEmail.Where(e => !e.Usuario.JaCadastrouSenha && e.MetodoAutenticacao != EMetodoAutenticacao.UsuarioRede).Select(e => e.Usuario);
 
         protected string RetornarDataFimInscricao()
         {

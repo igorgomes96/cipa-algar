@@ -41,7 +41,7 @@ namespace Cipa.Infra.Data.EntityConfig
                 .HasMaxLength(255);
 
             builder.HasIndex(u => u.Login).IsUnique();
-            builder.HasIndex(u => u.Email).IsUnique();
+            builder.HasIndex(u => new { u.Email, u.MetodoAutenticacao });
         }
     }
 }

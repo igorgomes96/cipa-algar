@@ -90,6 +90,13 @@ export class CustomInputComponent implements OnInit, ControlValueAccessor {
     return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
   }
 
+  get isRequired(): boolean {
+    if (!this.control.validator) return false;
+    const validator = this.control.validator({} as AbstractControl);
+
+    return validator && validator.required;
+  }
+
   updateValue(valor: any) {
     if (valor !== null) {
       switch (this.type) {

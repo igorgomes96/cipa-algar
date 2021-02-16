@@ -21,16 +21,16 @@ namespace Cipa.Domain.Helpers
     public static class ColunasArquivo
     {
         public const string Matricula = "Matrícula";
-        public const string Email = "Email";
-        public const string Login = "Login";
+        public const string Email = "E-mail";
+        public const string Login = "Usuário de Rede";
         public const string Nome = "Nome";
         public const string Cargo = "Cargo";
         public const string Area = "Área";
         public const string DataAdmissao = "Data de Admissão";
         public const string DataNascimento = "Data de Nascimento";
         public const string NomeGestor = "Nome do Gestor";
-        public const string EmailGestor = "Email do Gestor";
-        public const string MetodoAutenticacao = "Realizar login via:";
+        public const string EmailGestor = "E-mail do Gestor";
+        public const string MetodoAutenticacao = "Realizar login via";
     }
 
 

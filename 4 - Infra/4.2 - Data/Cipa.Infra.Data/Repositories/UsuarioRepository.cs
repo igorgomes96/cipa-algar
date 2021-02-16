@@ -19,7 +19,7 @@ namespace Cipa.Infra.Data.Repositories
 
         public Usuario BuscarUsuarioPeloEmail(string email)
         {
-            return DbSet.FirstOrDefault(u => u.Email == email);
+            return DbSet.FirstOrDefault(u => u.Email == email && u.MetodoAutenticacao == EMetodoAutenticacao.Email);
         }
 
         public Usuario BuscarUsuarioPeloLogin(string login)

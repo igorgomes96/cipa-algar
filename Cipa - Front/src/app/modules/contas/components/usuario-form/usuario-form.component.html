@@ -6,8 +6,24 @@
   </div>
 
   <div class="row">
-    <div class="col-md-6">
-      <app-custom-input formControlName="login" [control]="form.get('login')" name="Login" label="Login">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="metodoAutenticacao">Realizar login via:</label>
+        <br>
+        <input id="autenticacaoUsuarioRede" type="radio" [value]="MetodoAutenticacao.UsuarioRede"
+          name="metodoAutenticacao" formControlName="metodoAutenticacao">
+        <label for="autenticacaoUsuarioRede" class="m-r-md"> Usuário de Rede</label>
+        <input id="autenticacaoEmail" type="radio" [value]="MetodoAutenticacao.Email" name="metodoAutenticacao"
+          formControlName="metodoAutenticacao">
+        <label for="autenticacaoEmail"> Email</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6" *ngIf="form.get('metodoAutenticacao').value === MetodoAutenticacao.UsuarioRede">
+      <app-custom-input formControlName="login" [control]="form.get('login')" id="login"
+        label="Usuário de rede" name="login" maxlength="100">
       </app-custom-input>
     </div>
 
@@ -23,7 +39,7 @@
       <app-custom-input formControlName="nome" [control]="form.get('nome')" name="Nome" label="Nome"></app-custom-input>
     </div>
 
-    <div class="col-md-12">
+    <div class="col-md-6">
       <app-custom-input formControlName="cargo" [control]="form.get('cargo')" name="Cargo" label="Cargo">
       </app-custom-input>
     </div>

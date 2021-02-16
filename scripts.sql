@@ -14,4 +14,7 @@ ALTER TABLE `cipa`.`Eleitores`
 CHANGE COLUMN `Email` `Email` VARCHAR(100) NULL ;
 ALTER TABLE `cipa`.`Usuarios` 
 ADD COLUMN `MetodoAutenticacao` INT NOT NULL DEFAULT 1 AFTER `Id`;
+ALTER TABLE `cipa`.`Usuarios` DROP INDEX `IX_Usuarios_Email`;
+ALTER TABLE `cipa`.`Usuarios` 
+ADD INDEX `IX_Usuarios_Email` (`Email` ASC, `MetodoAutenticacao` ASC) VISIBLE;
 

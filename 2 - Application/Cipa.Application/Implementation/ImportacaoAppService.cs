@@ -23,7 +23,7 @@ namespace Cipa.Application
         private readonly DataColumnValidator[] _dataColumnValidators;
         private readonly IProgressoImportacaoEvent _progressoEvent;
         private const int LINHA_INICIAL_ARQUIVO = 1;
-        private const int QTDA_MAX_ERROS = 10;
+        private const int QTDA_MAX_ERROS = 30;
 
         public ImportacaoAppService(
             IUnitOfWork unitOfWork,
@@ -58,11 +58,13 @@ namespace Cipa.Application
 
             // Valida os valores
             int linha = LINHA_INICIAL_ARQUIVO + 1;
+            var validators = _dataColumnValidators.ToDictionary(k => k.ColumnName);
+
             foreach (DataRow dr in dataTable.Rows)
             {
                 for (int i = 0; i < dataTable.Columns.Count; i++)
                 {
-                    var validator = _dataColumnValidators.FirstOrDefault(v => v.ColumnName == dataTable.Columns[i].ColumnName);
+                    var validator = validators[dataTable.Columns[i].ColumnName];
                     if (validator == null) continue;
                     object value = dr[validator.ColumnName];
                     var erro = validator.ValidarValor(value);
@@ -70,6 +72,24 @@ namespace Cipa.Application
                         inconsistencias.Add(new Inconsistencia(validator.ColumnName, linha, erro));
                 }
                 var countLinhasErros = inconsistencias.Select(i => i.Linha).Distinct().Count();
+
+                var login = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Login, validators[ColunasArquivo.Login]).Trim();
+                var email = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Email, validators[ColunasArquivo.Email]).Trim().ToLower();
+                var realizarLoginVia = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.MetodoAutenticacao, validators[ColunasArquivo.MetodoAutenticacao])?.Trim();
+                var metodoAutenticacao = realizarLoginVia == "E-mail" ? EMetodoAutenticacao.Email : EMetodoAutenticacao.UsuarioRede;
+
+                if (metodoAutenticacao == EMetodoAutenticacao.Email)
+                {
+                    if (string.IsNullOrWhiteSpace(email))
+                        inconsistencias.Add(new Inconsistencia(ColunasArquivo.Email, linha, $"O e-mail do eleitor deve ser informado. (Linha {linha})."));
+                    
+                    dr[ColunasArquivo.Login] = email;
+                }
+                else if (string.IsNullOrWhiteSpace(login))
+                {
+                    inconsistencias.Add(new Inconsistencia(ColunasArquivo.Login, linha, $"O usuário de rede do eleitor deve ser informado. (Linha {linha})."));
+                }
+
                 if (countLinhasErros > QTDA_MAX_ERROS)
                     break;
                 linha++;
@@ -100,13 +120,14 @@ namespace Cipa.Application
                 var realizarLoginVia = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.MetodoAutenticacao, validators[ColunasArquivo.MetodoAutenticacao])?.Trim();
                 var metodoAutenticacao = realizarLoginVia == "E-mail" ? EMetodoAutenticacao.Email : EMetodoAutenticacao.UsuarioRede;
 
-                var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloEmail(email);
+                var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloLogin(login);
                 if (usuario == null)
                     usuario = new Usuario(login, email, nome, cargo, metodoAutenticacao);
 
                 var eleitor = new Eleitor(usuario)
                 {
                     Cargo = cargo,
+                    MetodoAutenticacao = metodoAutenticacao,
                     Area = ObtemValorFormatoCorreto<string>(dr, ColunasArquivo.Area, validators[ColunasArquivo.Area])?.Trim(),
                     DataAdmissao = ObtemValorFormatoCorreto<DateTime?>(dr, ColunasArquivo.DataAdmissao, validators[ColunasArquivo.DataAdmissao]),
                     DataNascimento = ObtemValorFormatoCorreto<DateTime?>(dr, ColunasArquivo.DataNascimento, validators[ColunasArquivo.DataNascimento]),
@@ -123,7 +144,7 @@ namespace Cipa.Application
         }
 
         private IEnumerable<Inconsistencia> RetornarInconsistenciasEmailsDuplicados(List<Eleitor> eleitores) =>
-            eleitores.Select(e => e.Email).Distinct()
+            eleitores.Where(e => e.PossuiEmail).Select(e => e.Email).Distinct()
                 .ToDictionary(email => email, email => eleitores.Count(e => e.Email == email))
                 .Where(dic => dic.Value > 1)
                 .Select(dic => new Inconsistencia(
@@ -139,7 +160,7 @@ namespace Cipa.Application
                 importacao.IniciarProcessamento();
                 base.Atualizar(importacao);
                 var arquivoImportacao = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), importacao.Arquivo.Path);
-                var dataTable = _excelService.LerTabela(arquivoImportacao, LINHA_INICIAL_ARQUIVO, 10);
+                var dataTable = _excelService.LerTabela(arquivoImportacao, LINHA_INICIAL_ARQUIVO, 11);
                 var inconsistencias = ValidarFormatoDataTable(dataTable, importacao.Arquivo.LoginUsuario);
 
                 if (!FinalizarImportacaoComErro(importacao, inconsistencias))

@@ -68,6 +68,7 @@ namespace Cipa.WebApi.AutoMapper
                 cfg.CreateMap<Grupo, GrupoViewModel>();
                 cfg.CreateMap<Grupo, GrupoDetalhesViewModel>();
                 cfg.CreateMap<EtapaPadraoConta, EtapaPadraoContaViewModel>().ReverseMap();
+                cfg.CreateMap<EMetodoAutenticacao, int>().ConvertUsing(src => (int)src);
                 cfg.CreateMap<Usuario, UsuarioViewModel>()
                     .ReverseMap()
                     .ConvertUsing((dest, _, ctx) => new Usuario(dest.Login, dest.Email, dest.Nome, dest.Cargo, ctx.Mapper.Map<EMetodoAutenticacao>(dest.MetodoAutenticacao)));
