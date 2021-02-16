@@ -51,9 +51,8 @@ namespace Cipa.WebApi
             services.AddDbContext<CipaContext>(options =>
             {
                 options.UseLazyLoadingProxies();
-                options.UseMySql(Configuration.GetConnectionString("MySqlConnection"));
-                // options.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
-                //     b => b.MigrationsAssembly("Cipa.WebApi"));
+                var connection = Configuration.GetConnectionString("MySqlConnection");
+                options.UseMySql(connection, ServerVersion.AutoDetect(connection));
             });
 
             var signingConfigurations = new SigningConfigurations(Configuration.GetSection("TokenConfigurations:Secret").Value);

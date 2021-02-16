@@ -13,6 +13,7 @@ namespace Cipa.Domain.Entities
             Email = usuario.Email;
             Login = usuario.Login;
             Cargo = usuario.Cargo;
+            MetodoAutenticacao = usuario.MetodoAutenticacao;
         }
 
         public string Nome { get; set; }

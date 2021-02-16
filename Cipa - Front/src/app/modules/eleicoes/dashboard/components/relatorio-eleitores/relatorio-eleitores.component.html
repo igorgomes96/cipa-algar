@@ -11,6 +11,7 @@
       <tr>
         <th>Nome</th>
         <th>E-mail</th>
+        <th>Login / Usuário de Rede</th>
         <th>Horário</th>
         <th>IP</th>
       </tr>
@@ -19,6 +20,7 @@
       <tr *ngFor="let voto of votos.result">
         <td>{{ voto.eleitorNome }}</td>
         <td>{{ voto.eleitorEmail }}</td>
+        <td>{{ voto.eleitorLogin }}</td>
         <td>{{ voto.horario | date:'dd/MM/yyyy HH:mm:ss' }}</td>
         <td>{{ voto.ip }}</td>
       </tr>

@@ -52,6 +52,7 @@ namespace Cipa.Domain.Entities
             GrupoId = grupoId == 0 ? throw new CustomException("O grupo precisa ser informado para a abertura da eleição.") : grupoId;
             TerminoMandatoAnterior = terminoMandatoAnterior;
             DataFinalizacaoPrevista = dataInicio.AddDays(60);
+            _dimensionamento = new Dimensionamento(0, 0, 0, 0);
         }
 
         public int Gestao { get; private set; }
@@ -109,7 +110,7 @@ namespace Cipa.Domain.Entities
             }
         }
         private Dimensionamento _dimensionamento;
-        public virtual Dimensionamento Dimensionamento { get => _dimensionamento ?? new Dimensionamento(0, 0, 0, 0); }
+        public virtual Dimensionamento Dimensionamento => _dimensionamento;
         public virtual ICollection<Inscricao> Inscricoes { get; } = new List<Inscricao>();
         private readonly List<EtapaCronograma> _cronograma = new List<EtapaCronograma>();
         public virtual IReadOnlyCollection<EtapaCronograma> Cronograma
@@ -369,7 +370,7 @@ namespace Cipa.Domain.Entities
 
         public Eleitor AdicionarEleitor(Eleitor eleitor)
         {
-            eleitor.Email = eleitor.Email.Trim().ToLower();
+            eleitor.Email = eleitor.Email?.Trim()?.ToLower();
 
             if (JaUltrapassouEtapa(ECodigoEtapaObrigatoria.Votacao))
                 throw new CustomException("Não é permitido cadastrar eleitores após o período de votação.");

@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Cipa.Application.Events;
 using Cipa.Application.Events.EventsArgs;
 using Cipa.Application.Interfaces;
@@ -176,8 +175,8 @@ namespace Cipa.Application
                             SalvarEleitor(importacao.Eleicao, eleitor);
                             //NotificarProgresso(3, linha, eleitores.Count, importacao.Arquivo.EmailUsuario);
                         }
-                        FinalizarImportacaoComSucesso(importacao);
                         _unitOfWork.EleicaoRepository.Atualizar(importacao.Eleicao);
+                        FinalizarImportacaoComSucesso(importacao);
                         _unitOfWork.Commit();
                     }
                 }

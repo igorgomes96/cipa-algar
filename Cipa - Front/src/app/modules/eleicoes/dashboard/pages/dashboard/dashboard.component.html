@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <app-panel title="Relatório de eleitores" [options]="optionsEleitoresVotantes"
+  <app-panel title="Registros de Votos" [options]="optionsEleitoresVotantes"
     (optionClick)="onOptionsEleitoresVotantesClick($event)">
     <app-relatorio-eleitores [eleicao]="eleicao"></app-relatorio-eleitores>
   </app-panel>
@@ -34,7 +34,7 @@
 
 </div>
 
-<app-panel title="Relação de Votos por Candidato" [options]="optionsCandidatos"
+<app-panel title="Relatório de Inscrições e Qtda. de Votos" [options]="optionsCandidatos"
   (optionClick)="onOptionsCandidatosClick()" *ngIf="eleicao.dimensionamento.qtdaVotos && resultado">
   <app-relacao-candidatos [resultado]="resultado" [eleicao]="eleicao" [downloadRelatorio]="donwloadRelatorioCandidatos">
   </app-relacao-candidatos>

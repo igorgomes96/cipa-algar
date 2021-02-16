@@ -55,6 +55,7 @@ namespace Cipa.WebApi.AutoMapper
                     DataAdmissao = src.Eleitor.DataAdmissao,
                     DataNascimento = src.Eleitor.DataNascimento,
                     Email = src.Eleitor.Email,
+                    Login = src.Eleitor.Login,
                     InscricaoId = src.Id,
                     Matricula = src.Eleitor.Matricula,
                     Nome = src.Eleitor.Nome,
