@@ -30,6 +30,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using System.Collections.Generic;
 using System;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Cipa.WebApi
 {
@@ -136,6 +138,11 @@ namespace Cipa.WebApi
                 options.Providers.Add<GzipCompressionProvider>();
             });
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
@@ -172,6 +179,9 @@ namespace Cipa.WebApi
             {
                 hubContext.Clients.User(args.EmailUsuario).SendAsync("importacaofinalizada", mapper.Map<FinalizacaoImportacaoStatusViewModel>(args));
             };
+
+            var options = new RewriteOptions().AddRewrite(@"^((?!.*?\b(web$.*|health.*|api\/.*)))((\w+))*\/?(\.\w{{5,}})?\??([^.]+)?$", "index.html", false);
+            app.UseRewriter(options);
 
             // app.UseHttpsRedirection();
             app.UseResponseCompression();

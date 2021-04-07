@@ -27,6 +27,9 @@ namespace Cipa.Application
         public Usuario BuscarUsuario(string login, string senha) =>
             (_repositoryBase as IUsuarioRepository).BuscarUsuario(login, senha);
 
+        public Usuario BuscarUsuarioPeloLogin(string login) =>
+            (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloLogin(login);
+
         public IEnumerable<Usuario> BuscarUsuariosPelaConta(int contaId) =>
             (_repositoryBase as IUsuarioRepository).BuscarUsuariosPelaConta(contaId);
 
@@ -79,7 +82,7 @@ namespace Cipa.Application
             if (usuario.Login != usuarioExistente.Login && (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloLogin(usuario.Login) != null)
                 throw new DuplicatedException($"Já há um usuário cadastrado com o login '{usuario.Login}'.");
 
-            if (usuario.Email != usuarioExistente.Email && (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloLogin(usuario.Email) != null)
+            if (usuario.Email != usuarioExistente.Email && (_repositoryBase as IUsuarioRepository).BuscarUsuarioPeloEmail(usuario.Email) != null)
                 throw new DuplicatedException($"Já há um usuário cadastrado com o email '{usuario.Email}'.");
 
             usuarioExistente.Cargo = usuario.Cargo;
