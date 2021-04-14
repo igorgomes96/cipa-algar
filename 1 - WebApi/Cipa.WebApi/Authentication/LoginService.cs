@@ -187,7 +187,7 @@ namespace Cipa.WebApi.Authentication
 
         private AuthInfoViewModel GerarToken(Usuario usuario, ClaimsIdentity identity)
         {
-            DateTime dataCriacao = DateTime.Now.HorarioBrasilia();
+            DateTime dataCriacao = DateTime.UtcNow;
             DateTime dataExpiracao = dataCriacao + TimeSpan.FromSeconds(_tokenConfigurations.Seconds);
 
             var handler = new JwtSecurityTokenHandler();
