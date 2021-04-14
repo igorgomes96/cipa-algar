@@ -6,15 +6,15 @@ ALTER TABLE Eleitores ADD COLUMN MetodoAutenticacao INT NOT NULL DEFAULT 1 AFTER
 ALTER TABLE Usuarios ADD COLUMN Login VARCHAR(100) NULL AFTER Nome;
 update Usuarios set Login = Email;
 ALTER TABLE Usuarios CHANGE COLUMN Login Login VARCHAR(100) NOT NULL;
-ALTER TABLE `cipa`.`Usuarios` 
+ALTER TABLE `Usuarios` 
 ADD UNIQUE INDEX `Login_UNIQUE` (`Login` ASC) VISIBLE;
-ALTER TABLE `cipa`.`Arquivos` 
+ALTER TABLE `Arquivos` 
 CHANGE COLUMN `EmailUsuario` `LoginUsuario` VARCHAR(100) NOT NULL;
-ALTER TABLE `cipa`.`Eleitores` 
+ALTER TABLE `Eleitores` 
 CHANGE COLUMN `Email` `Email` VARCHAR(100) NULL ;
-ALTER TABLE `cipa`.`Usuarios` 
+ALTER TABLE `Usuarios` 
 ADD COLUMN `MetodoAutenticacao` INT NOT NULL DEFAULT 1 AFTER `Id`;
-ALTER TABLE `cipa`.`Usuarios` DROP INDEX `IX_Usuarios_Email`;
-ALTER TABLE `cipa`.`Usuarios` 
+ALTER TABLE `Usuarios` DROP INDEX `IX_Usuarios_Email`;
+ALTER TABLE `Usuarios` 
 ADD INDEX `IX_Usuarios_Email` (`Email` ASC, `MetodoAutenticacao` ASC) VISIBLE;
 
