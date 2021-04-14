@@ -16,7 +16,6 @@ namespace Cipa.Infra.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new EleicaoConfiguration());
-            modelBuilder.ApplyConfiguration(new ConfiguracaoEleicaoConfiguration());
             modelBuilder.ApplyConfiguration(new EmpresaConfiguration());
             modelBuilder.ApplyConfiguration(new EstabelecimentoConfiguration());
             modelBuilder.ApplyConfiguration(new EtapaCronogramaConfiguration());
@@ -30,7 +29,6 @@ namespace Cipa.Infra.Data.Context
             modelBuilder.ApplyConfiguration(new EtapaObrigatoriaConfiguration());
             modelBuilder.ApplyConfiguration(new EtapaPadraoContaConfiguration());
             modelBuilder.ApplyConfiguration(new ContaConfiguration());
-            modelBuilder.ApplyConfiguration(new DimensionamentoConfiguration());
             modelBuilder.ApplyConfiguration(new UsuarioConfiguration());
             modelBuilder.ApplyConfiguration(new ArquivoConfiguration());
             modelBuilder.ApplyConfiguration(new ImportacaoConfiguration());
@@ -60,12 +58,10 @@ namespace Cipa.Infra.Data.Context
         public virtual DbSet<Grupo> Grupos { get; set; }
         public virtual DbSet<LinhaDimensionamento> LinhasDimensionamentos { get; set; }
         public virtual DbSet<LimiteDimensionamento> LimitesDimensionamentos { get; set; }
-        public virtual DbSet<Dimensionamento> Dimensionamentos { get; set; }
         public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<ProcessamentoEtapa> ProcessamentosEtapas { get; set; }
         public virtual DbSet<EtapaPadraoConta> EtapasPadroesContas { get; set; }
         public virtual DbSet<TemplateEmail> TemplatesEmails { get; set; }
-        public virtual DbSet<ConfiguracaoEleicao> ConfiguracoesEleicoes { get; set; }
 
 
         public override int SaveChanges()

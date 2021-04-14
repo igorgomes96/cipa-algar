@@ -95,13 +95,17 @@ export class CronogramaComponent implements OnInit {
       return;
     }
 
-    this.toasts.confirmModal(
-      `O ínicio do processo está previsto para o dia ${formatDate(this.eleicao.cronograma[0].dataPrevista, 'dd/MM/yyyy', 'pt-BR')}.
+    if (this.eleicao.cronograma[0].dataPrevista > new Date()) {
+      this.toasts.confirmModal(
+        `O ínicio do processo está previsto para o dia ${formatDate(this.eleicao.cronograma[0].dataPrevista, 'dd/MM/yyyy', 'pt-BR')}.
       Deseja realmente antecipar?`, 'Confirmação')
-      .pipe(
-        filter(confirmacao => confirmacao),
-        switchMap(_ => this.eleicoesApi.postProximaEtapa(this.eleicao.id))
-      ).subscribe(cronograma => this.alteracaoCronograma(cronograma, 'Processo iniciado com sucesso!'));
+        .pipe(
+          filter(confirmacao => confirmacao),
+          switchMap(_ => this.eleicoesApi.postProximaEtapa(this.eleicao.id))
+        ).subscribe(cronograma => this.alteracaoCronograma(cronograma, 'Processo iniciado com sucesso!'));
+    } else {
+      this.eleicoesApi.postProximaEtapa(this.eleicao.id).subscribe(cronograma => this.alteracaoCronograma(cronograma, 'Processo iniciado com sucesso!'));
+    }
   }
 
   private buscaProximaEtapa(etapa: EtapaCronograma): EtapaCronograma {

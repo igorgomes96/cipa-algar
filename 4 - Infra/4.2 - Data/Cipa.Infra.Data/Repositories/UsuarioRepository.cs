@@ -12,14 +12,19 @@ namespace Cipa.Infra.Data.Repositories
     {
         public UsuarioRepository(CipaContext db) : base(db) { }
 
-        public Usuario BuscarUsuario(string email, string senha)
+        public Usuario BuscarUsuario(string login, string senha)
         {
-            return DbSet.FirstOrDefault(u => u.Email == email && u.Senha == senha);
+            return DbSet.FirstOrDefault(u => u.Login == login && u.Senha == senha);
         }
 
-        public Usuario BuscarUsuario(string email)
+        public Usuario BuscarUsuarioPeloEmail(string email)
         {
-            return DbSet.FirstOrDefault(u => u.Email == email);
+            return DbSet.FirstOrDefault(u => u.Email == email && u.MetodoAutenticacao == EMetodoAutenticacao.Email);
+        }
+
+        public Usuario BuscarUsuarioPeloLogin(string login)
+        {
+            return DbSet.FirstOrDefault(u => u.Login == login);
         }
 
         public Usuario BuscarUsuarioPeloCodigoRecuperacao(Guid codigo)

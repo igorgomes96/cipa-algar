@@ -10,13 +10,13 @@ namespace Cipa.Domain.Entities
     }
     public class Arquivo : Entity<int>
     {
-        public Arquivo(string path, string nome, long tamanho, string contentType, string emailUsuario, string nomeUsuario, DependencyFileType dependencyType, int dependencyId)
+        public Arquivo(string path, string nome, long tamanho, string contentType, string loginUsuario, string nomeUsuario, DependencyFileType dependencyType, int dependencyId)
         {
             Path = path;
             Nome = nome;
             Tamanho = tamanho;
             ContentType = contentType;
-            EmailUsuario = emailUsuario;
+            LoginUsuario = loginUsuario;
             NomeUsuario = nomeUsuario;
             DependencyType = dependencyType;
             DependencyId = dependencyId;
@@ -26,7 +26,7 @@ namespace Cipa.Domain.Entities
         public string Nome { get; private set; }
         public long Tamanho { get; private set; }
         public string ContentType { get; private set; }
-        public string EmailUsuario { get; private set; }
+        public string LoginUsuario { get; private set; }
         public string NomeUsuario { get; private set; }
         public DependencyFileType DependencyType { get; private set; }
         public int DependencyId { get; private set; }

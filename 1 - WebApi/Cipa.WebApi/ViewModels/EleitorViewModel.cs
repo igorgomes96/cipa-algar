@@ -9,10 +9,13 @@ namespace Cipa.WebApi.ViewModels
         [Required(ErrorMessage = "O nome do eleitor deve ser informado.")]
         [StringLength(255, ErrorMessage = "O nome do eleitor não pode conter mais de {1} caracteres.")]
         public string Nome { get; set; }
-        [Required(ErrorMessage = "O e-mail do eleitor deve ser informado.")]
         [EmailAddress(ErrorMessage = "O e-mail está em formato inválido.")]
         [StringLength(100, ErrorMessage = "O e-mail do eleitor não pode conter mais de {1} caracteres.")]
         public string Email { get; set; }
+        public int MetodoAutenticacao { get; set; }
+        [Required(ErrorMessage = "O logind do eleitor deve ser informado.")]
+        [StringLength(100, ErrorMessage = "O login do eleitor não pode conter mais de {1} caracteres.")]
+        public string Login { get; set; }
         [StringLength(50, ErrorMessage = "A matrícula do eleitor não pode conter mais de {1} caracteres.")]
         public string Matricula { get; set; }
         [StringLength(255, ErrorMessage = "A área/departamento do eleitor não pode conter mais de {1} caracteres.")]

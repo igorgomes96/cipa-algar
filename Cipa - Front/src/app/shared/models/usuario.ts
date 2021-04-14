@@ -1,3 +1,5 @@
+import { MetodoAutenticacao } from "./eleitor";
+
 export enum Perfil {
   SESMT = 'SESMT',
   Eleitor = 'Eleitor',
@@ -6,7 +8,9 @@ export enum Perfil {
 
 export class Usuario {
   id: number;
+  metodoAutenticacao?: MetodoAutenticacao;
   nome: string;
+  login?: string;
   email: string;
   senha: string;
   confirmacaoSenha: string;
@@ -22,6 +26,7 @@ export class AuthInfo {
   qtdaMaxEstabelecimentos: number;
   expiracao: Date;
   email: string;
+  login?: string;
   perfil: Perfil;
   nomePlano: string;
 }

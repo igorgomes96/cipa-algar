@@ -55,6 +55,7 @@ namespace Cipa.WebApi.AutoMapper
                     DataAdmissao = src.Eleitor.DataAdmissao,
                     DataNascimento = src.Eleitor.DataNascimento,
                     Email = src.Eleitor.Email,
+                    Login = src.Eleitor.Login,
                     InscricaoId = src.Id,
                     Matricula = src.Eleitor.Matricula,
                     Nome = src.Eleitor.Nome,
@@ -68,9 +69,10 @@ namespace Cipa.WebApi.AutoMapper
                 cfg.CreateMap<Grupo, GrupoViewModel>();
                 cfg.CreateMap<Grupo, GrupoDetalhesViewModel>();
                 cfg.CreateMap<EtapaPadraoConta, EtapaPadraoContaViewModel>().ReverseMap();
+                cfg.CreateMap<EMetodoAutenticacao, int>().ConvertUsing(src => (int)src);
                 cfg.CreateMap<Usuario, UsuarioViewModel>()
                     .ReverseMap()
-                    .ConvertUsing(dest => new Usuario(dest.Email, dest.Nome, dest.Cargo));
+                    .ConvertUsing((dest, _, ctx) => new Usuario(dest.Login, dest.Email, dest.Nome, dest.Cargo, ctx.Mapper.Map<EMetodoAutenticacao>(dest.MetodoAutenticacao)));
                 cfg.CreateMap<Conta, ContaViewModel>();
                 cfg.CreateMap<Conta, ContaDetalhesViewModel>();
                 cfg.CreateMap<IEnumerable<Inscricao>, ResultadoApuracaoViewModel>()

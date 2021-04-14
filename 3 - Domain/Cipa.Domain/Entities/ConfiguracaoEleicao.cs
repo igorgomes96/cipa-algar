@@ -11,7 +11,6 @@ namespace Cipa.Domain.Entities
             EnvioConviteVotacao = envioConviteVotacao;
         }
 
-        public int Id { get; set; }
         public bool EnvioEditalConvocao { get; set; }
         public bool EnvioConviteInscricao { get; set; }
         public bool EnvioConviteVotacao { get; set; }

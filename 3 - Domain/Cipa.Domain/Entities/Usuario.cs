@@ -8,15 +8,25 @@ namespace Cipa.Domain.Entities
 {
     public class Usuario : Entity<int>
     {
-        public Usuario(string email, string nome, string cargo)
+
+        public Usuario(string login, string email, string nome, string cargo, EMetodoAutenticacao metodoAutenticacao)
         {
-            Email = email.Trim().ToLower();
+            Login = login.Trim();
+            Email = string.IsNullOrWhiteSpace(email) ? null : email.Trim().ToLower();
             Nome = nome;
             Cargo = cargo;
-            CodigoRecuperacao = Guid.NewGuid();
-            ExpiracaoCodigoRecuperacao = DateTime.Now.AddDays(1);
             Perfil = Cipa.Domain.Helpers.PerfilUsuario.Eleitor;
+            MetodoAutenticacao = metodoAutenticacao;
+            if (metodoAutenticacao == EMetodoAutenticacao.Email)
+            {
+                CodigoRecuperacao = Guid.NewGuid();
+                ExpiracaoCodigoRecuperacao = DateTime.Now.AddDays(1);
+                MetodoAutenticacao = EMetodoAutenticacao.Email;
+            }
         }
+
+        public EMetodoAutenticacao MetodoAutenticacao { get; set; }
+        public string Login { get; set; }
         public string Email { get; set; }
         public string Nome { get; set; }
         public string Senha { get; set; }
@@ -27,6 +37,7 @@ namespace Cipa.Domain.Entities
         public DateTime? ExpiracaoCodigoRecuperacao { get; private set; }
         public string Cargo { get; set; }
         public DateTime DataCadastro { get; private set; }
+        public bool PossuiEmail => !string.IsNullOrWhiteSpace(Email);
 
         public virtual Conta Conta { get; set; }
         private List<Eleitor> _eleitores = new List<Eleitor>();
@@ -55,6 +66,9 @@ namespace Cipa.Domain.Entities
 
         public void CadastrarSenha(Guid codigoRecuperacao, string senha)
         {
+            if (MetodoAutenticacao == EMetodoAutenticacao.UsuarioRede)
+                throw new CustomException("Esse usuário realiza login via usuário e senha de rede.");
+
             if (codigoRecuperacao != CodigoRecuperacao)
                 throw new CustomException("Código de recuperação inválido.");
 

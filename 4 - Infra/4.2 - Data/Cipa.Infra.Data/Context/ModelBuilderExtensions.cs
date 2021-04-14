@@ -621,7 +621,7 @@ namespace Cipa.Infra.Data.Context
                 new LinhaDimensionamento(10000, 5001, 6, 5) { Id = 366, GrupoId = 45 }
             };
 
-            Usuario usuario = new Usuario("teste@email.com", "Teste", "Cargo Teste")
+            Usuario usuario = new Usuario("teste", "teste@email.com", "Teste", "Cargo Teste", EMetodoAutenticacao.Email)
             {
                 Id = 1,
                 Senha = "03c32dc379d1b0958f3ef87d94ebb4ec859b9e2fdd297f44d68d8dd5f36800cc", // Teste12

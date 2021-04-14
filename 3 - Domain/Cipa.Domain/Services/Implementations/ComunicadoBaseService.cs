@@ -22,6 +22,7 @@ namespace Cipa.Domain.Services.Implementations
 
         protected virtual ICollection<Email> FormatarEmailPadrao(TemplateEmail templateEmail, string destinatarios)
         {
+            if (string.IsNullOrWhiteSpace(destinatarios)) return new Email[0];
             var mensagem = SubstituirParametrosTemplate(templateEmail.Template);
             return new List<Email> {
                 new Email(destinatarios, null, templateEmail.Assunto, mensagem)

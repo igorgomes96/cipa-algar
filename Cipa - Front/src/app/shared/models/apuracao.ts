@@ -14,6 +14,7 @@ export class Apuracao {
   eleicaoId: number;
   nome: string;
   email: string;
+  login: string;
   matricula: string;
   cargo: string;
   area: string;

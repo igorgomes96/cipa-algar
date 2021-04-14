@@ -47,14 +47,32 @@ namespace Cipa.Infra.Data.EntityConfig
                 .IsRequired()
                 .Metadata.DependentToPrincipal.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-            builder.HasOne(e => e.Dimensionamento)
-                .WithOne()
-                .HasForeignKey<Dimensionamento>(d => d.Id)
-                .Metadata.PrincipalToDependent.SetPropertyAccessMode(PropertyAccessMode.Field);
+            builder.OwnsOne(e => e.Dimensionamento,
+                map => {
+                    map.Ignore(e => e.Id)
+                       .Ignore(e => e.PossuiQtdaMinimaInscritos)
+                       .Ignore(e => e.PossuiQtdaMinimaVotos)
+                       .Ignore(e => e.QtdaInscricoes)
+                       .Ignore(e => e.QtdaMinimaVotos)
+                       .Ignore(e => e.TotalCipeiros);
+                    map.Property(e => e.Minimo).HasColumnName("DimensionamentoMinEleitores");
+                    map.Property(e => e.Maximo).HasColumnName("DimensionamentoMaxEleitores");
+                    map.Property(e => e.QtdaEfetivos).HasColumnName("DimensionamentoQtdaEfetivos");
+                    map.Property(e => e.QtdaSuplentes).HasColumnName("DimensionamentoQtdaSuplentes");
+                    map.Property(e => e.QtdaEleitores).HasColumnName("QtdaEleitores");
+                    map.Property(e => e.QtdaVotos).HasColumnName("QtdaVotos");
+                    map.Property(e => e.QtdaInscricoesAprovadas).HasColumnName("QtdaInscricoesAprovadas");
+                    map.Property(e => e.QtdaInscricoesReprovadas).HasColumnName("QtdaInscricoesReprovadas");
+                    map.Property(e => e.QtdaInscricoesPendentes).HasColumnName("QtdaInscricoesPendentes");
+                }).UsePropertyAccessMode(PropertyAccessMode.Field);
 
-            builder.HasOne(e => e.Configuracao)
-                 .WithOne()
-                 .HasForeignKey<ConfiguracaoEleicao>(c => c.Id);
+            builder.OwnsOne(e => e.Configuracao,
+                map => {
+                    map.Property(c => c.EnvioEditalConvocao).HasColumnName("EnvioEditalConvocao").IsRequired();
+                    map.Property(c => c.EnvioConviteInscricao).HasColumnName("EnvioConviteInscricao").IsRequired();
+                    map.Property(c => c.EnvioConviteVotacao).HasColumnName("EnvioConviteVotacao").IsRequired();
+                });
+
 
             builder.HasIndex(e => new { e.EstabelecimentoId, e.Gestao }).IsUnique();
         }

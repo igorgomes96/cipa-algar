@@ -7,6 +7,7 @@ namespace Cipa.WebApi.ViewModels
         public int EleicaoId { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
+        public string Login { get; set; }
         public string Matricula { get; set; }
         public string Cargo { get; set; }
         public string Area { get; set; }

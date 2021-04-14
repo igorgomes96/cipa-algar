@@ -30,6 +30,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 using System.Collections.Generic;
 using System;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Cipa.WebApi
 {
@@ -51,11 +53,11 @@ namespace Cipa.WebApi
             services.AddDbContext<CipaContext>(options =>
             {
                 options.UseLazyLoadingProxies();
-                options.UseMySql(Configuration.GetConnectionString("MySqlConnection"),
-                    b => b.MigrationsAssembly("Cipa.WebApi"));
+                var connection = Configuration.GetConnectionString("MySqlConnection");
+                options.UseMySql(connection, ServerVersion.AutoDetect(connection));
             });
 
-            var signingConfigurations = new SigningConfigurations();
+            var signingConfigurations = new SigningConfigurations(Configuration.GetSection("TokenConfigurations:Secret").Value);
             services.AddSingleton(signingConfigurations);
 
             var tokenConfigurations = new TokenConfigurations();
@@ -136,6 +138,11 @@ namespace Cipa.WebApi
                 options.Providers.Add<GzipCompressionProvider>();
             });
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
             services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
@@ -161,7 +168,7 @@ namespace Cipa.WebApi
 
             app.UseHttpErrorMiddleware();
 
-            app.UseHsts();
+            // app.UseHsts();
 
             notificacaoProgressoEvent.NotificacaoProgresso += (object sender, ProgressoImportacaoEventArgs args) =>
             {
@@ -173,7 +180,10 @@ namespace Cipa.WebApi
                 hubContext.Clients.User(args.EmailUsuario).SendAsync("importacaofinalizada", mapper.Map<FinalizacaoImportacaoStatusViewModel>(args));
             };
 
-            app.UseHttpsRedirection();
+            var options = new RewriteOptions().AddRewrite(@"^((?!.*?\b(web$.*|health.*|api\/.*)))((\w+))*\/?(\.\w{{5,}})?\??([^.]+)?$", "index.html", false);
+            app.UseRewriter(options);
+
+            // app.UseHttpsRedirection();
             app.UseResponseCompression();
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -184,7 +194,7 @@ namespace Cipa.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ProgressHub>("/api/hub");
+                endpoints.MapHub<ProgressHub>("/api/signalr");
             });
         }
 

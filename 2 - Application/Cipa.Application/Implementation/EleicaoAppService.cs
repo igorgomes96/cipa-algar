@@ -189,9 +189,14 @@ namespace Cipa.Application
             var eleicao = _unitOfWork.EleicaoRepository.BuscarPeloId(eleicaoId);
             if (eleicao == null) throw new NotFoundException("Eleição não encontrada.");
 
-            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuario(eleitor.Email);
+            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloLogin(eleitor.Login);
             if (usuario == null)
-                usuario = new Usuario(eleitor.Email, eleitor.Nome, eleitor.Cargo);
+                usuario = new Usuario(eleitor.Login, eleitor.Email, eleitor.Nome, eleitor.Cargo, eleitor.MetodoAutenticacao);
+            else {
+                usuario.MetodoAutenticacao = eleitor.MetodoAutenticacao;
+                usuario.Email = eleitor.Email;
+            }
+
             eleitor.Usuario = usuario;
 
             var eleitorAdicionado = eleicao.AdicionarEleitor(eleitor);
@@ -335,9 +340,14 @@ namespace Cipa.Application
             var eleicao = _unitOfWork.EleicaoRepository.BuscarPeloId(eleicaoId);
             if (eleicao == null) throw new NotFoundException("Eleição não encontrada.");
 
-            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuario(eleitor.Email);
+            var usuario = _unitOfWork.UsuarioRepository.BuscarUsuarioPeloLogin(eleitor.Login);
             if (usuario == null)
-                usuario = new Usuario(eleitor.Email, eleitor.Nome, eleitor.Cargo);
+                usuario = new Usuario(eleitor.Login, eleitor.Email, eleitor.Nome, eleitor.Cargo, eleitor.MetodoAutenticacao);
+            else {
+                usuario.MetodoAutenticacao = eleitor.MetodoAutenticacao;
+                usuario.Email = eleitor.Email;
+            }
+
             eleitor.Usuario = usuario;
 
             var eleitorAtualizado = eleicao.AtualizarEleitor(eleitor);
@@ -388,18 +398,19 @@ namespace Cipa.Application
             File.WriteAllBytes(originalFileName, foto);
 
             // Converte para JPEG, com 80% da qualidade
-            string destinationFileName = FileSystemHelpers.GetRelativeFileName(relativePath, Path.ChangeExtension(fotoFileName, ".jpeg"));
+            /*string destinationFileName = FileSystemHelpers.GetRelativeFileName(relativePath, Path.ChangeExtension(fotoFileName, ".jpeg"));
             ImageHelpers.SalvarImagemJPEG(originalFileName, @FileSystemHelpers.GetAbsolutePath(destinationFileName), 80);
 
             // Exclui o arquivo orginal
-            File.Delete(originalFileName);
+            File.Delete(originalFileName);*/
 
             if (!string.IsNullOrWhiteSpace(inscricao.Foto))
             {
                 var fotoAnterior = FileSystemHelpers.GetAbsolutePath(inscricao.Foto);
                 if (File.Exists(fotoAnterior)) File.Delete(FileSystemHelpers.GetAbsolutePath(inscricao.Foto));
             }
-            inscricao.Foto = destinationFileName;
+            // inscricao.Foto = destinationFileName;
+            inscricao.Foto = originalFileName;
             base.Atualizar(eleicao);
             return inscricao;
         }
@@ -439,7 +450,7 @@ namespace Cipa.Application
             if (usuario == null) throw new CustomException("Usuário inválido!");
 
             var arquivo = _arquivoAppService.SalvarArquivo(
-                DependencyFileType.Importacao, eleicao.Id, usuario.Email, usuario.Nome,
+                DependencyFileType.Importacao, eleicao.Id, usuario.Login, usuario.Nome,
                 conteudoArquivo, nomeArquivo, contentType);
 
             ValidaFormatoPlanilha(arquivo.Path);
@@ -459,7 +470,7 @@ namespace Cipa.Application
             if (usuario == null) throw new CustomException("Usuário inválido!");
 
             return _arquivoAppService.SalvarArquivo(
-                DependencyFileType.DocumentoCronograma, etapaId, usuario.Email, usuario.Nome,
+                DependencyFileType.DocumentoCronograma, etapaId, usuario.Login, usuario.Nome,
                 conteudoArquivo, nomeArquivo, contentType);
         }
 
@@ -510,6 +521,7 @@ namespace Cipa.Application
 
             dataTable.Columns.Add("Nome");
             dataTable.Columns.Add("Email");
+            dataTable.Columns.Add("Login / Usuário de Rede");
             dataTable.Columns.Add("Matrícula");
             dataTable.Columns.Add("Cargo");
             dataTable.Columns.Add("Área");
@@ -522,6 +534,7 @@ namespace Cipa.Application
             {
                 inscricao.Eleitor.Nome,
                 inscricao.Eleitor.Email,
+                inscricao.Eleitor.Login,
                 inscricao.Eleitor.Matricula,
                 inscricao.Eleitor.Cargo,
                 inscricao.Eleitor.Area,
@@ -532,7 +545,7 @@ namespace Cipa.Application
             }).ToList();
             
             foreach (var inscricao in apuracao) {
-                dataTable.Rows.Add(inscricao.Nome, inscricao.Email,
+                dataTable.Rows.Add(inscricao.Nome, inscricao.Email, inscricao.Login,
                     inscricao.Matricula, inscricao.Cargo, inscricao.Area,
                     inscricao.DataNascimento, inscricao.DataAdmissao, inscricao.DataCadastro,
                     inscricao.Votos);
@@ -551,6 +564,7 @@ namespace Cipa.Application
 
             dataTable.Columns.Add("Nome");
             dataTable.Columns.Add("Email");
+            dataTable.Columns.Add("Login / Usuário de Rede");
             dataTable.Columns.Add("Matrícula");
             dataTable.Columns.Add("Cargo");
             dataTable.Columns.Add("Área");
@@ -563,6 +577,7 @@ namespace Cipa.Application
             {
                 voto.Eleitor.Nome,
                 voto.Eleitor.Email,
+                voto.Eleitor.Login,
                 voto.Eleitor.Matricula,
                 voto.Eleitor.Cargo,
                 voto.Eleitor.Area,
@@ -574,7 +589,7 @@ namespace Cipa.Application
 
             foreach (var voto in votos)
             {
-                dataTable.Rows.Add(voto.Nome, voto.Email,
+                dataTable.Rows.Add(voto.Nome, voto.Email, voto.Login,
                     voto.Matricula, voto.Cargo, voto.Area,
                     voto.DataNascimento, voto.DataAdmissao,
                     voto.DataCadastro, voto.IP);
