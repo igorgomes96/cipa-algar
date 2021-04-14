@@ -180,8 +180,8 @@ namespace Cipa.WebApi
                 hubContext.Clients.User(args.EmailUsuario).SendAsync("importacaofinalizada", mapper.Map<FinalizacaoImportacaoStatusViewModel>(args));
             };
 
-            var options = new RewriteOptions().AddRewrite(@"^((?!.*?\b(web$.*|health.*|api\/.*)))((\w+))*\/?(\.\w{{5,}})?\??([^.]+)?$", "index.html", false);
-            app.UseRewriter(options);
+            // var options = new RewriteOptions().AddRewrite(@"^((?!.*?\b(web$.*|health.*|api\/.*)))((\w+))*\/?(\.\w{{5,}})?\??([^.]+)?$", "index.html", false);
+            // app.UseRewriter(options);
 
             // app.UseHttpsRedirection();
             app.UseResponseCompression();
