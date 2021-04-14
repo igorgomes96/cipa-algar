@@ -3,8 +3,8 @@ sudo yum update
 sudo yum install nginx
 sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm  # add the Microsoft package signing key to your list of trusted keys
 sudo yum install dotnet-sdk-3.1  # install .net sdk
-git clone https://github.com/igorgomes96/cipa-algar.git # baixa o código fonte
-cd cipa-algar
+# descompactar o código-fonte
+cd cipa-algar-master
 
 # Atualizar as seguinte informações entre colchetes no arquivo "1 - WebApi/Cipa.WebApi/appsettings.json":
 <<COMMENT
