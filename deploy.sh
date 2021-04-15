@@ -1,4 +1,5 @@
 #!/bin/bash
+# Instalar o MySql - Server: seguir os passos do tutorial: https://www.hostinger.com/tutorials/how-to-install-mysql-on-centos-7
 sudo yum update
 sudo yum install nginx
 sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm  # add the Microsoft package signing key to your list of trusted keys
@@ -59,7 +60,7 @@ WantedBy=multi-user.target
 COMMENT
 
 sudo systemctl enable cipa.service # habilita inicialização automática
-sudo systemctl start cipa # inicializa o serviço
+sudo systemctl start cipa
 
 # Atualizar a seção "server" do arquivo /etc/nginx/nginx.conf de acordo com as informações abaixo,
 # substituindo [cipa.domain.com.br] pelo endereço DNS da aplicação:
@@ -88,4 +89,4 @@ sudo systemctl start cipa # inicializa o serviço
     } 
 COMMENT
 
-
+sudo systemctl restart nginx
