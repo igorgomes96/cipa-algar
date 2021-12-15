@@ -6,13 +6,16 @@ using Cipa.WebApi.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Novell.Directory.Ldap;
 using System;
 using System.DirectoryServices;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Threading.Tasks;
 
 namespace Cipa.WebApi.Authentication
 {
@@ -24,6 +27,7 @@ namespace Cipa.WebApi.Authentication
         private readonly IContaAppService _contaAppService;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
+        private readonly HttpClient client = new HttpClient();
 
         public LoginService(
             IUsuarioAppService usuarioAppService,
@@ -95,7 +99,7 @@ namespace Cipa.WebApi.Authentication
         #endregion
 
         #region Linux
-        public bool AutenticarUsuario(string login, string senha)
+        /*public bool AutenticarUsuario(string login, string senha)
         {
             string dDomain = _configuration.GetSection("LDAP:Domain").Value;
             string LDAP = _configuration.GetSection("LDAP:Path").Value;
@@ -115,22 +119,49 @@ namespace Cipa.WebApi.Authentication
                 _logger.LogError(ex, "Erro ao consultar AD: {0}", ex.Message);
             }
             return false;
+        }*/
+        #endregion
+
+        #region API
+        public async Task<bool> AutenticarUsuario(string login, string senha)
+        {
+            try
+            {
+                string url = _configuration.GetSection("AuthenticationUrl").Value + $"/login?usuario={login}&senha={senha}";
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+                dynamic content = JsonConvert.DeserializeObject(result);
+                return content.status?.ToString() == "200";
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Erro ao chamar API de autenticação: {0}", e.Message);
+                return false;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Erro ao deserializar resposta da API de autenticação: {0}", e.Message);
+                return false;
+            }
         }
         #endregion
 
 
         private Usuario ValidaUsuario(string login, string senha)
-        {
-            senha = CryptoService.ComputeSha256Hash(senha);
+        {  
             var usuario = _usuarioAppService.BuscarUsuarioPeloLogin(login);
             if (usuario == null) throw new CustomException($"Usuário com login {login} não cadastrado!");
             switch (usuario.MetodoAutenticacao)
             {
                 case EMetodoAutenticacao.Email:
-                    if (usuario.Senha != senha) throw new CustomException("Senha incorreta.");
+                    if (usuario.Senha != CryptoService.ComputeSha256Hash(senha)) throw new CustomException("Senha incorreta.");
                     break;
                 case EMetodoAutenticacao.UsuarioRede:
-                    if (!AutenticarUsuario(login, senha)) throw new CustomException("Credencias inválidas!");
+                    bool usuarioAutenticado = false;
+                    var task = AutenticarUsuario(login, senha).ContinueWith(t => usuarioAutenticado = t.Result);
+                    task.Wait();
+                    if (!usuarioAutenticado) throw new CustomException("Credencias inválidas!");
                     break;
             }
             return usuario;

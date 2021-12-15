@@ -36,7 +36,7 @@ namespace Cipa.Domain.Helpers
 
     public static class Links
     {
-        public const string URL = "https://cipa.solucoesti.online";
+        public const string URL = "https://cipa.algartech.com";
         public const string Login = "/autenticacao/login";
         public const string Cadastro = "/autenticacao/cadastro";
         public const string Reset = "/autenticacao/reset";

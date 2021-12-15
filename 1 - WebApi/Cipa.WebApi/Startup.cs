@@ -102,10 +102,12 @@ namespace Cipa.WebApi
                 .AllowCredentials()
                 .WithOrigins("http://localhost:4200")));
 
+#if !DEBUG
             services.AddHostedService<ImportacaoHostedService>();
             services.AddHostedService<EmailHostedService>();
             services.AddHostedService<ProcesssamentoEtapasHostedService>();
             services.AddHostedService<AlteracaoEtapaService>();
+#endif
 
             services.Configure<GzipCompressionProviderOptions>(options =>
             {

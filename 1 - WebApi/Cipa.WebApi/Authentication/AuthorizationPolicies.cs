@@ -34,13 +34,13 @@ namespace Cipa.WebApi.Authentication
             return bool.TryParse(claim.Value, out bool claimValue) && claimValue;
         };
 
-        private static Func<ClaimsPrincipal, string, DateTime> dataExpiracao = (ClaimsPrincipal user, string claimType) =>
-        {
-            var claim = user.Claims.FirstOrDefault(c => c.Type == claimType);
-            if (claim == null) return DateTime.MinValue;
-            bool dataValida = DateTime.TryParse(claim.Value, out DateTime data);
-            return dataValida ? data : DateTime.MinValue;
-        };
+        //private static Func<ClaimsPrincipal, string, DateTime> dataExpiracao = (ClaimsPrincipal user, string claimType) =>
+        //{
+        //    var claim = user.Claims.FirstOrDefault(c => c.Type == claimType);
+        //    if (claim == null) return DateTime.MinValue;
+        //    bool dataValida = DateTime.TryParse(claim.Value, out DateTime data);
+        //    return dataValida ? data : DateTime.MinValue;
+        //};
 
         private static Func<AuthorizationHandlerContext, bool> usuarioSESMTPossuiContaExpression = (context) =>
             (context.User.IsInRole(PerfilUsuario.SESMT) || context.User.IsInRole(PerfilUsuario.Administrador))
@@ -51,8 +51,8 @@ namespace Cipa.WebApi.Authentication
 
         private static Func<AuthorizationHandlerContext, bool> usuarioSESMTPossuiContaValidaExpression = (context) =>
             usuarioSESMTPossuiContaExpression(context)
-            && hasBooleanClaim(context.User, CustomClaimTypes.ContaValida)
-            && dataExpiracao(context.User, CustomClaimTypes.DataExpiracaoConta) > DateTime.Now.HorarioBrasilia();
+            && hasBooleanClaim(context.User, CustomClaimTypes.ContaValida);
+            //&& dataExpiracao(context.User, CustomClaimTypes.DataExpiracaoConta) > DateTime.Now.HorarioBrasilia();
 
 
         public static AuthorizationPolicy UsuarioSESMTAuthorizationPolicy =>

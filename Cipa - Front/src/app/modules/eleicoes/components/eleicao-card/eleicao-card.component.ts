@@ -1,7 +1,7 @@
 import { Eleicao } from '@shared/models/eleicao';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
 import { ToastsService } from 'src/app/core/services/toasts.service';
-import { filter, finalize, tap, switchMap } from 'rxjs/operators';
+import { filter, finalize, tap, switchMap, first } from 'rxjs/operators';
 import { StatusAprovacao } from '@shared/models/inscricao';
 import { CodigoEtapaObrigatoria } from '@shared/models/cronograma';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -20,6 +20,7 @@ import { forkJoin } from 'rxjs';
 export class EleicaoCardComponent implements OnInit {
 
   @Input() eleicao: Eleicao;
+  @Input() excluindo = false;
   @Output() excluir = new EventEmitter<Eleicao>();
 
   @ViewChild('modalAlteracaoGrupo', { static: false }) modalAlteracaoGrupo: TemplateRef<any>;
@@ -58,8 +59,10 @@ export class EleicaoCardComponent implements OnInit {
   }
 
   excluirEleicao() {
-    this.toast.confirmModal('Tem certeza que deseja excluir essa eleição? Essa ação não poderá ser desfeita', 'Confirmação')
-      .pipe(filter(confirmacao => confirmacao)).subscribe(_ => this.excluir.emit(this.eleicao));
+    this.toast.confirmModal('Tem certeza que deseja excluir essa eleição? Essa ação não poderá ser desfeita.', 'Confirmação')
+      .pipe(
+        filter(confirmacao => confirmacao)
+      ).subscribe(_ => this.excluir.emit(this.eleicao));
   }
 
   get labelStatusClass() {

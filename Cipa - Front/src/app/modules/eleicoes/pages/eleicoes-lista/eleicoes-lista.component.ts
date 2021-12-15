@@ -8,7 +8,7 @@ import { ToastType } from 'src/app/core/components/toasts/toasts.component';
 import { AuthInfo, Perfil } from '@shared/models/usuario';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { CodigoEtapaObrigatoria, EtapaObrigatoria } from '@shared/models/cronograma';
-import { tap, switchMap, filter, delay } from 'rxjs/operators';
+import { tap, switchMap, filter, delay, finalize } from 'rxjs/operators';
 import { from, forkJoin, of } from 'rxjs';
 
 @Component({
@@ -29,6 +29,7 @@ export class EleicoesListaComponent implements OnInit {
   eleicoesFinalizadas: Eleicao[];
   authInfo: AuthInfo;
   Perfil = Perfil;
+  excluindo = false;
 
   constructor(
     private eleicoesApi: EleicoesApiService,
@@ -61,7 +62,9 @@ export class EleicoesListaComponent implements OnInit {
   }
 
   excluir(eleicao: Eleicao) {
+    this.excluindo = true;
     this.eleicoesApi.delete(eleicao.id)
+      .pipe(finalize(() => this.excluindo = false))
       .subscribe(_ => {
         this.toast.showMessage({
           message: 'Eleição excluída com sucesso!',

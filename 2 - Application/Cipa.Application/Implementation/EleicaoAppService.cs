@@ -84,11 +84,6 @@ namespace Cipa.Application
         {
             Eleicao eleicao = _unitOfWork.EleicaoRepository.BuscarPeloId(id);
             if (eleicao == null) throw new NotFoundException("Código de eleição não encontrado.");
-
-            if (eleicao.EtapaAtual != null || eleicao.DataFinalizacao.HasValue)
-            {
-                throw new CustomException("Um eleição só pode ser excluída antes do início do processo.");
-            }
             _unitOfWork.EleicaoRepository.Excluir(eleicao);
             _unitOfWork.Commit();
             return eleicao;
