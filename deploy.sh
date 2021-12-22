@@ -27,8 +27,26 @@ cd cipa-algar-master
   },
 COMMENT
 
+# Se houver backup
+current_time=$(date "+%Y.%m.%d-%H.%M")
+backup=/var/tmp/cipa-$current_time
+mkdir $backup
+cp -R /var/www/cipa/* $backup
+
+
 cd "1 - WebApi/Cipa.WebApi"
 sudo /usr/bin/dotnet publish --configuration Release -o /var/www/cipa # publica a aplicação
+
+# Se for a primeira publicação, excute os comandos abaixo
+sudo mkidr -p /var/www/cipa/Assets/documentos
+sudo mkidr -p /var/www/cipa/Assets/documentos/documentocronograma
+sudo mkidr -p /var/www/cipa/Assets/documentos/importacao
+sudo mkidr -p /var/www/cipa/Assets/fotos
+sudo mkidr -p /var/www/cipa/Assets/relatorios
+
+# Se não for a primeira publicação e houver backup
+sudo cp -R $backup/Assets/* /var/www/cipa/Assets
+
 sudo chmod -R 777 /var/www/cipa/Assets # atualiza permissões de acesso ao diretório de arquivos estáticos
 sudo touch /etc/systemd/system/cipa.service # cria o arquivo de definição de serviço
 
