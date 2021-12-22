@@ -20,10 +20,9 @@ namespace Cipa.Application
     {
         private readonly IArquivoAppService _arquivoAppService;
         private readonly IFormatadorEmailServiceFactory _formatadorFactory;
-        private readonly EmailConfiguration _emailConfiguration;
         private readonly IExcelService _excelService;
-        private const string PATH_FOTOS = @"StaticFiles\Fotos\";
-        private const string PATH_RELATORIOS = @"StaticFiles\Relatorios\";
+        private const string PATH_FOTOS = @"Assets/fotos/";
+        private const string PATH_RELATORIOS = @"Assets/relatorios/";
 
         public EleicaoAppService(
             IUnitOfWork unitOfWork,
@@ -34,7 +33,6 @@ namespace Cipa.Application
         {
             _arquivoAppService = arquivoAppService;
             _formatadorFactory = formatadorFactory;
-            _emailConfiguration = emailConfiguration;
             _excelService = excelService;
         }
 
@@ -378,34 +376,24 @@ namespace Cipa.Application
             var inscricao = eleicao.BuscarEleitorPeloUsuarioId(usuarioId)?.Inscricao;
             if (inscricao == null) throw new NotFoundException("Inscrição não encontrada.");
 
-            string relativePath = $@"{PATH_FOTOS}{eleicaoId.ToString()}";
+            var fileName = $"{Guid.NewGuid().ToString().Replace("-", "")}{Path.GetExtension(fotoFileName)}";
+            string relativePath = $@"{PATH_FOTOS}{eleicaoId}";
             string absolutePath = @FileSystemHelpers.GetAbsolutePath(relativePath);
-            string tempPath = FileSystemHelpers.GetAbsolutePath($@"{relativePath}/temp");
+            var relativeFileName = Path.Combine(relativePath, fileName);
 
             if (!Directory.Exists(absolutePath))
                 Directory.CreateDirectory(absolutePath);
 
-            if (!Directory.Exists(tempPath))
-                Directory.CreateDirectory(tempPath);
-
             // Salva a imagem original
-            string originalFileName = @FileSystemHelpers.GetAbsolutePath(FileSystemHelpers.GetRelativeFileName(tempPath, fotoFileName));
+            string originalFileName = Path.Combine(absolutePath, fileName);
             File.WriteAllBytes(originalFileName, foto);
-
-            // Converte para JPEG, com 80% da qualidade
-            /*string destinationFileName = FileSystemHelpers.GetRelativeFileName(relativePath, Path.ChangeExtension(fotoFileName, ".jpeg"));
-            ImageHelpers.SalvarImagemJPEG(originalFileName, @FileSystemHelpers.GetAbsolutePath(destinationFileName), 80);
-
-            // Exclui o arquivo orginal
-            File.Delete(originalFileName);*/
 
             if (!string.IsNullOrWhiteSpace(inscricao.Foto))
             {
                 var fotoAnterior = FileSystemHelpers.GetAbsolutePath(inscricao.Foto);
                 if (File.Exists(fotoAnterior)) File.Delete(FileSystemHelpers.GetAbsolutePath(inscricao.Foto));
             }
-            // inscricao.Foto = destinationFileName;
-            inscricao.Foto = originalFileName;
+            inscricao.Foto = relativeFileName;
             base.Atualizar(eleicao);
             return inscricao;
         }

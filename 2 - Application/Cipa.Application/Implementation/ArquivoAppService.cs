@@ -11,7 +11,7 @@ namespace Cipa.Application
 {
     public class ArquivoAppService : AppServiceBase<Arquivo>, IArquivoAppService
     {
-        private const string PATH_DOCUMENTOS = @"StaticFiles\Documentos\";
+        private const string PATH_DOCUMENTOS = @"Assets\documento\";
         public ArquivoAppService(IUnitOfWork unitOfWork) : base(unitOfWork, unitOfWork.ArquivoRepository)
         {
 
@@ -47,7 +47,7 @@ namespace Cipa.Application
 
         private string GetRelativePath(DependencyFileType dependencyType, int dependencyId)
         {
-            return $@"{PATH_DOCUMENTOS}{dependencyType.ToString().ToLower()}\{dependencyId.ToString()}";
+            return $@"{PATH_DOCUMENTOS}{dependencyType.ToString().ToLower()}\{dependencyId}";
         }
 
 
