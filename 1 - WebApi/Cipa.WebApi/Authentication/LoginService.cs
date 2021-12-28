@@ -128,9 +128,11 @@ namespace Cipa.WebApi.Authentication
             try
             {
                 string url = _configuration.GetSection("AuthenticationUrl").Value + $"/login?usuario={login}&senha={senha}";
+                _logger.LogInformation("Iniciando chamada da API de autenticação para usuário {0}", login);
                 HttpResponseMessage response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
+                _logger.LogInformation("StatusCode: {0}, response: {1}", response.StatusCode, result);
                 dynamic content = JsonConvert.DeserializeObject(result);
                 return content.status?.ToString() == "200";
             }
@@ -152,6 +154,7 @@ namespace Cipa.WebApi.Authentication
         {  
             var usuario = _usuarioAppService.BuscarUsuarioPeloLogin(login);
             if (usuario == null) throw new CustomException($"Usuário com login {login} não cadastrado!");
+            _logger.LogInformation("Usuário {0} encontrado. Id {1}, nome: {2}, método de autenticação: {3}", login, usuario.Id, usuario.Nome, usuario.MetodoAutenticacao.ToString("g"));
             switch (usuario.MetodoAutenticacao)
             {
                 case EMetodoAutenticacao.Email:
