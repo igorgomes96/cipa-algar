@@ -13,6 +13,7 @@ import { HomeComponent } from './modules/home/home.component';
 import { ForbiddenComponent } from './modules/forbidden/pages/forbidden/forbidden.component';
 import { EstabelecimentosModule } from './modules/estabelecimentos/estabelecimentos.module';
 import { InterceptorsModule } from './core/interceptors/interceptors.module';
+import { SharedModule } from '@shared/shared.module';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -33,6 +34,7 @@ registerLocaleData(localePt);
     BrowserAnimationsModule,
     InterceptorsModule,
     CoreModule,
+    SharedModule,
     EstabelecimentosModule,
     JwtModule.forRoot({
       config: {

@@ -69,11 +69,13 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
+            "aot": true,
             "browserTarget": "cipa:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "cipa:build:production"
+              "browserTarget": "cipa:build:production",
+              "aot": true
             }
           }
         },
