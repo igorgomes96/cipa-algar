@@ -37,11 +37,13 @@ namespace Cipa.Domain.Entities
         }
 
 
+        public decimal PercentualMinimoVotos { get; set; }
+
         public int QtdaMinimaVotos
         {
             get
             {
-                return (int)Math.Ceiling((decimal)QtdaEleitores / 2);
+                return (int)Math.Ceiling((decimal)QtdaEleitores * PercentualMinimoVotos);
             }
         }
 

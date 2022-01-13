@@ -601,6 +601,7 @@ namespace Cipa.Domain.Test.Entities
             int qtdaEleitores, int qtdaVotos)
         {
             var eleicao = CriarEleicao();
+            eleicao.Dimensionamento.PercentualMinimoVotos = 0.5m;
 
             // Adiciona os eleitores
             List<Eleitor> eleitores = new List<Eleitor>();
@@ -630,7 +631,7 @@ namespace Cipa.Domain.Test.Entities
                 eleicao.RegistrarVoto((i % qtdaInscricoes) + 1, eleitores.ElementAt(i), "::1");
 
             var excecao = Assert.Throws<CustomException>(() => eleicao.PassarParaProximaEtapa());
-            Assert.Equal("Esta eleição ainda não atingiu os 50% de participação de todos os funcionários, conforme exigido pela NR-5.", excecao.Message);
+            Assert.Equal("Esta eleição ainda não atingiu o percentual mínimo de participação, conforme exigido pela NR-5.", excecao.Message);
         }
 
         public static object[][] InlineDataCronograma = new object[][] {

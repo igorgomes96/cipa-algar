@@ -238,6 +238,7 @@ namespace Cipa.Domain.Entities
                 QtdaInscricoesPendentes = QtdaInscricoes(StatusInscricao.Pendente),
                 QtdaVotos = Votos.Count,
                 QtdaEleitores = Eleitores.Count,
+                PercentualMinimoVotos = Dimensionamento?.PercentualMinimoVotos?? 0
             };
         }
 
@@ -330,7 +331,7 @@ namespace Cipa.Domain.Entities
 
             if (EtapaAtual.EtapaObrigatoriaId == ECodigoEtapaObrigatoria.Votacao && !Dimensionamento.PossuiQtdaMinimaVotos)
             {
-                throw new CustomException("Esta eleição ainda não atingiu os 50% de participação de todos os funcionários, conforme exigido pela NR-5.");
+                throw new CustomException("Esta eleição ainda não atingiu o percentual mínimo de participação, conforme exigido pela NR-5.");
             }
         }
 

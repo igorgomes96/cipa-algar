@@ -77,6 +77,8 @@ namespace Cipa.Domain.Test.Services
             eleicao.PassarParaProximaEtapa();
             eleicao.PassarParaProximaEtapa();
 
+            eleicao.Dimensionamento.PercentualMinimoVotos = 0.5m;
+
             var inscricao1 = eleicao.FazerInscricao(eleitor1, "Objetivos 1");
             inscricao1.Id = 1;
             var inscricao2 = eleicao.FazerInscricao(eleitor3, "Objetivos 3");
@@ -95,7 +97,7 @@ namespace Cipa.Domain.Test.Services
             mensagemEsperadaBuilder.Append("Ocorreu um erro ao finalizar a etapa atual da eleição da CIPA, que está sendo realizada na ");
             mensagemEsperadaBuilder.Append("empresa Soluções TI, inscrita no CNPJ 30.271.795/0001-33. Por favor, verifique.");
             mensagemEsperadaBuilder.Append("\n<br><br>\n");
-            mensagemEsperadaBuilder.Append("Mensagem de erro: <strong>Esta eleição ainda não atingiu os 50% de participação de todos os funcionários, conforme exigido pela NR-5.");
+            mensagemEsperadaBuilder.Append("Mensagem de erro: <strong>Esta eleição ainda não atingiu o percentual mínimo de participação, conforme exigido pela NR-5.");
             mensagemEsperadaBuilder.Append("</strong>\n<br>\n");
             mensagemEsperadaBuilder.Append("Etapa Atual: <strong>Votação</strong>\n<br>\n");
             mensagemEsperadaBuilder.Append("Etapa Posterior: <strong>Finalização da Eleição</strong>\n<br><br>\n");

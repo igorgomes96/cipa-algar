@@ -53,6 +53,7 @@ namespace Cipa.Infra.Data.EntityConfig
                        .Ignore(e => e.PossuiQtdaMinimaInscritos)
                        .Ignore(e => e.PossuiQtdaMinimaVotos)
                        .Ignore(e => e.QtdaInscricoes)
+                       .Ignore(e => e.PercentualMinimoVotos)
                        .Ignore(e => e.QtdaMinimaVotos)
                        .Ignore(e => e.TotalCipeiros);
                     map.Property(e => e.Minimo).HasColumnName("DimensionamentoMinEleitores");
