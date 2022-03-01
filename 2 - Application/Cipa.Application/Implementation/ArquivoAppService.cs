@@ -11,7 +11,7 @@ namespace Cipa.Application
 {
     public class ArquivoAppService : AppServiceBase<Arquivo>, IArquivoAppService
     {
-        private const string PATH_DOCUMENTOS = @"Assets\documento\";
+        private const string PATH_DOCUMENTOS = @"Assets/documentos/";
         public ArquivoAppService(IUnitOfWork unitOfWork) : base(unitOfWork, unitOfWork.ArquivoRepository)
         {
 
